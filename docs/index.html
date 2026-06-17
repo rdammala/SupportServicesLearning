@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SupportServices Learning Hub - Learn Azure & .NET</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-content">
+      <a href="./index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="./index.html" class="active">Home</a></li>
+          <li><a href="#roles">Roles</a></li>
+          <li><a href="#technologies">Technologies</a></li>
+          <li><a href="./labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <button class="sidebar-close">✕</button>
+    
+    <div class="sidebar-section">
+      <div class="sidebar-title">🎯 Roles</div>
+      <a href="./roles/sre-perspective.html" class="sidebar-link">Site Reliability Engineer</a>
+      <a href="./roles/devops-engineer.html" class="sidebar-link">DevOps Engineer</a>
+      <a href="./roles/data-engineer.html" class="sidebar-link">Data Engineer</a>
+      <a href="./roles/technical-support.html" class="sidebar-link">Technical Support</a>
+      <a href="./roles/tpm-perspective.html" class="sidebar-link">Technical Program Manager</a>
+      <a href="./roles/platform-engineer.html" class="sidebar-link">Platform Engineer</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">⚙️ Technologies</div>
+      <a href="./technologies/csharp-dotnet.html" class="sidebar-link">C# / .NET 10</a>
+      <a href="./technologies/react-typescript.html" class="sidebar-link">React / TypeScript</a>
+      <a href="./technologies/api-integrations.html" class="sidebar-link">API Integrations</a>
+      <a href="./technologies/agentic-ai.html" class="sidebar-link">Agentic AI</a>
+      <a href="./technologies/bicep-arm.html" class="sidebar-link">Bicep / ARM</a>
+      <a href="./technologies/yaml-pipelines.html" class="sidebar-link">YAML / Pipelines</a>
+      <a href="./technologies/git-github-actions.html" class="sidebar-link">Git / GitHub Actions</a>
+      <a href="./technologies/observability.html" class="sidebar-link">Observability</a>
+      <a href="./technologies/aks-containers.html" class="sidebar-link">AKS / Containers</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">🧪 Labs & Capstones</div>
+      <a href="./labs/labs-index.html" class="sidebar-link">Lab Index</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">📖 Foundation</div>
+      <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank" class="sidebar-link">GitHub Repo</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="container">
+      <!-- HERO -->
+      <section class="hero">
+        <h1>SupportServices Learning Hub</h1>
+        <p>Practice-enabled, role-based and technology-based learning on a real production .NET 10 monorepo</p>
+        <p style="font-size: 0.9rem; color: var(--text-secondary);">
+          <strong>Last updated:</strong> June 2026 · 
+          <strong>Stack:</strong> .NET 10 · React 19 · Azure · Bicep · Azure DevOps + GitHub Actions · App Insights / OTel / KQL · AKS
+        </p>
+      </section>
+
+      <!-- HOW TO USE -->
+      <section>
+        <h2 id="how-to-use">How to use this hub</h2>
+        <p>This program is structured into three learning tracks. Pick a <strong>role</strong> to see the job through one lens, pick a <strong>technology</strong> to go deep on a skill, then do the <strong>labs</strong> to prove it.</p>
+        
+        <div class="mermaid">
+mindmap
+  root((SupportServices<br/>Learning Hub))
+    Roles
+      SRE
+      DevOps Engineer
+      Data Engineer
+      Technical Support
+      TPM
+      Platform Engineer
+    Technologies
+      C# / .NET 10
+      React / TypeScript
+      API Integrations
+      Agentic AI
+      Bicep / ARM
+      YAML / Pipelines
+      Git / GitHub Actions
+      Observability
+      AKS / Containers
+    Labs
+      Guided exercises
+      Capstone scenarios
+      Incident drills
+        </div>
+      </section>
+
+      <!-- ROLES TRACK -->
+      <section id="roles">
+        <h2>Track 1 — Role Perspectives</h2>
+        <p>Each role guide answers: <em>What do I own? What does the architecture look like through my eyes? What does my day look like? What do I practice?</em></p>
+        
+        <div class="card-grid">
+          <a href="./roles/sre-perspective.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Role</div>
+              <h3>Site Reliability Engineer</h3>
+              <p>Define SLOs/error budgets, run incidents, automate toil, slot-swap safely</p>
+            </div>
+          </a>
+
+          <a href="./roles/devops-engineer.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Role</div>
+              <h3>DevOps Engineer</h3>
+              <p>Build CI/CD, gate releases, manage IaC, ship safely</p>
+            </div>
+          </a>
+
+          <a href="./roles/data-engineer.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Role</div>
+              <h3>Data Engineer</h3>
+              <p>Model Cosmos data, build telemetry pipelines, KQL analytics</p>
+            </div>
+          </a>
+
+          <a href="./roles/technical-support.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Role</div>
+              <h3>Technical Support</h3>
+              <p>Triage with correlation IDs, read telemetry, escalate cleanly</p>
+            </div>
+          </a>
+
+          <a href="./roles/tpm-perspective.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Role</div>
+              <h3>Technical Program Manager</h3>
+              <p>Drive cross-domain delivery, manage risk, read dashboards</p>
+            </div>
+          </a>
+
+          <a href="./roles/platform-engineer.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Role</div>
+              <h3>Platform Engineer</h3>
+              <p>Build golden paths, shared libraries, self-service infra</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- TECHNOLOGIES TRACK -->
+      <section id="technologies">
+        <h2>Track 2 — Technology Deep-Dives</h2>
+        <p>Each tech guide: <strong>concept → how it's used here → hands-on lab → interview Q&A → checklist</strong>.</p>
+        
+        <div class="card-grid">
+          <a href="./technologies/csharp-dotnet.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Tech</div>
+              <h3>C# / .NET 10</h3>
+              <p>Backend, Functions, DI, async, error codes, testing</p>
+            </div>
+          </a>
+
+          <a href="./technologies/react-typescript.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Tech</div>
+              <h3>React 19 + TypeScript</h3>
+              <p>Loyalty Portal frontend, hooks, Redux, App Insights JS SDK</p>
+            </div>
+          </a>
+
+          <a href="./technologies/api-integrations.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Tech</div>
+              <h3>API Integrations</h3>
+              <p>Typed HTTP clients, REST design, resilience, RBAC</p>
+            </div>
+          </a>
+
+          <a href="./technologies/agentic-ai.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Tech</div>
+              <h3>Agentic AI</h3>
+              <p>Conversations agents, tools, RAG, safety, tracing, evals</p>
+            </div>
+          </a>
+
+          <a href="./technologies/bicep-arm.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Tech</div>
+              <h3>Bicep + ARM</h3>
+              <p>IaC, modules, deployment stacks, secrets, what-if</p>
+            </div>
+          </a>
+
+          <a href="./technologies/yaml-pipelines.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Tech</div>
+              <h3>YAML + Azure Pipelines</h3>
+              <p>OneBranch, templates, stages/jobs/steps, approval gates</p>
+            </div>
+          </a>
+
+          <a href="./technologies/git-github-actions.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Tech</div>
+              <h3>Git + GitHub Actions</h3>
+              <p>Branching, PRs, CI/CD, OIDC, reusable workflows</p>
+            </div>
+          </a>
+
+          <a href="./technologies/observability.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Tech</div>
+              <h3>Observability</h3>
+              <p>App Insights, KQL, OpenTelemetry, metrics, dashboards, alerts</p>
+            </div>
+          </a>
+
+          <a href="./technologies/aks-containers.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Tech</div>
+              <h3>AKS + Containers</h3>
+              <p>Docker, Kubernetes, KEDA, deployments, security, cost</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- LABS TRACK -->
+      <section id="labs">
+        <h2>Track 3 — Labs & Capstones</h2>
+        <p>Hands-on, self-graded exercises and end-to-end scenario drills.</p>
+        
+        <div class="card-grid">
+          <a href="./labs/labs-index.html" class="card-link">
+            <div class="card">
+              <div class="card-badge">Labs</div>
+              <h3>Lab Index & Capstones</h3>
+              <p>25+ guided exercises, 4 capstone scenarios, incident drills</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- LEARNING PATHS -->
+      <section>
+        <h2 id="learning-paths">Suggested Learning Paths</h2>
+        
+        <div class="mermaid">
+flowchart LR
+    Start([Pick your goal]) --> SRE{SRE / DevOps?}
+    Start --> DEV{Developer?}
+    Start --> DATA{Data / Observability?}
+    SRE -->|Yes| P1["Bicep/ARM → YAML/Pipelines<br/>→ Observability → AKS<br/>→ SRE role"]
+    DEV -->|Yes| P2["C#/.NET → API Integrations<br/>→ React → Agentic AI<br/>→ DevOps role"]
+    DATA -->|Yes| P3["Observability → KQL<br/>→ Data Engineer role<br/>→ TPM role"]
+    P1 --> Caps["🧪 labs/ Capstone:<br/>ship + observe + recover"]
+    P2 --> Caps
+    P3 --> Caps
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Goal</th>
+              <th>Suggested Path</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Become an SRE</strong></td>
+              <td>Bicep/ARM → YAML/Pipelines → Observability → AKS → SRE role → Labs</td>
+            </tr>
+            <tr>
+              <td><strong>Become a Backend Developer</strong></td>
+              <td>C#/.NET → API Integrations → Agentic AI → DevOps role → Labs</td>
+            </tr>
+            <tr>
+              <td><strong>Become a Data/Observability Engineer</strong></td>
+              <td>Observability → Data Engineer role → TPM role → Labs</td>
+            </tr>
+            <tr>
+              <td><strong>Become a Platform Engineer</strong></td>
+              <td>C#/.NET → Bicep/ARM → YAML/Pipelines → Platform role → Labs</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- CONVENTIONS -->
+      <section>
+        <h2>Conventions Used Across All Guides</h2>
+        
+        <div class="card" style="background: rgba(16, 185, 129, 0.05); border-left: 4px solid var(--success);">
+          <p><strong>🧠 Concept</strong> — The idea and why it matters</p>
+          <p><strong>🏗️ In this repo</strong> — How the production monorepo applies it</p>
+          <p><strong>🧪 Lab</strong> — Do-it-yourself exercise with acceptance criteria</p>
+          <p><strong>💬 Interview</strong> — Likely questions + crisp answers</p>
+          <p><strong>✅ Checklist / Runbook</strong> — Operational steps</p>
+          <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+            <em>All examples are Microsoft-stack only and are simplified, sanitized teaching versions inspired by real repo patterns — not production secrets or live endpoints.</em>
+          </p>
+        </div>
+      </section>
+
+      <!-- QUICK START -->
+      <section>
+        <h2>Quick Start</h2>
+        <p>Don't know where to start? Try this:</p>
+        <ol style="font-size: 1.05rem;">
+          <li><strong>Pick your role</strong> above (or use the sidebar) — read it in 15 minutes</li>
+          <li><strong>Pick one technology</strong> that role uses most — read it in 30 minutes</li>
+          <li><strong>Do a lab</strong> from that technology guide — 30–60 minutes, hands-on</li>
+          <li><strong>Join a capstone</strong> in labs/ — 2–4 hours, end-to-end scenario</li>
+        </ol>
+      </section>
+    </div>
+  </main>
+
+  <!-- SCROLL BUTTONS -->
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="#how-to-use">How to Use</a>
+        <a href="#learning-paths">Learning Paths</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+      <p style="font-size: 0.85rem;">Built with ❤️ for Microsoft Azure + .NET engineers</p>
+    </div>
+  </footer>
+
+  <script src="./assets/js/script.js"></script>
+</body>
+</html>

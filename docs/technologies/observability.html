@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Observability: AppInsights, KQL, OTel - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles">Roles</a></li>
+          <li><a href="../index.html#technologies" class="active">Technologies</a></li>
+          <li><a href="../labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <button class="sidebar-close">✕</button>
+    <div class="sidebar-section">
+      <div class="sidebar-title">⚙️ Technologies</div>
+      <a href="./csharp-dotnet.html" class="sidebar-link">C# / .NET 10</a>
+      <a href="./react-typescript.html" class="sidebar-link">React / TypeScript</a>
+      <a href="./api-integrations.html" class="sidebar-link">API Integrations</a>
+      <a href="./agentic-ai.html" class="sidebar-link">Agentic AI</a>
+      <a href="./bicep-arm.html" class="sidebar-link">Bicep / ARM</a>
+      <a href="./yaml-pipelines.html" class="sidebar-link">YAML / Pipelines</a>
+      <a href="./git-github-actions.html" class="sidebar-link">Git / GitHub Actions</a>
+      <a href="./observability.html" class="sidebar-link active">Observability</a>
+      <a href="./aks-containers.html" class="sidebar-link">AKS / Containers</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <a href="../index.html#technologies">Technologies</a> <span>/</span> <span>Observability</span>
+      </div>
+
+      <section class="hero">
+        <h1>Observability: AppInsights, KQL, OpenTelemetry, Metrics</h1>
+        <p>See inside production: measure, alert, and fix with confidence</p>
+      </section>
+
+      <div class="toc">
+        <div class="toc-title">📋 On This Page</div>
+        <ul>
+          <li><a href="#three-pillars">Three pillars of observability</a></li>
+          <li><a href="#otel">OpenTelemetry instrumentation</a></li>
+          <li><a href="#red-metrics">RED & USE metrics</a></li>
+          <li><a href="#kql-queries">KQL queries</a></li>
+          <li><a href="#dashboards-alerts">Dashboards & alerts</a></li>
+          <li><a href="#interview">Interview Q&A</a></li>
+        </ul>
+      </div>
+
+      <section id="three-pillars">
+        <h2>🧠 The Three Pillars of Observability</h2>
+        
+        <div class="mermaid">
+graph TB
+    subgraph Observability["3 pillars of observability"]
+        Traces["📍 Traces (Distributed Tracing)<br/>Full request journey: entry → exit"]
+        Metrics["📊 Metrics (Time-series)<br/>Counter, gauge, histogram: RED USE"]
+        Logs["📝 Logs (Events)<br/>Structured events with context"]
+    end
+    
+    Context["Context: correlation ID, dimensions, tags"]
+    
+    Traces -->|"operation_Id"| Context
+    Metrics -->|"tenant, status, region"| Context
+    Logs -->|"userId, severity"| Context
+    
+    Context --> AppInsights["Application Insights<br/>collection"]
+    AppInsights --> LogAnalytics["Log Analytics / KQL<br/>unified querying"]
+    LogAnalytics --> Dashboard["Dashboard<br/>SLO workbook"]
+    Dashboard --> Alerts["Alerts & Actions<br/>→ webhooks, Teams, Functions"]
+        </div>
+
+        <h3>Traces: See the full request</h3>
+        <pre><code>// One user request path:
+GET /chats/123?refund_id=456
+  ├─ Chat.Frontend
+  │  └─ Get request latency: 200ms
+  ├─ → Chat.Backend (RPC)
+  │  └─ Process latency: 150ms
+  ├─ → Cosmos DB query (GetChatById)
+  │  └─ Query latency: 80ms
+  ├─ → Service Bus publish (ChatCreated event)
+  │  └─ Publish latency: 20ms
+  └─ Response: 200 OK, headers, body
+
+All linked by operation_Id (correlation ID)</code></pre>
+
+        <h3>Metrics: Understand patterns</h3>
+        <ul>
+          <li><strong>Counter:</strong> Total requests, errors, items processed</li>
+          <li><strong>Gauge:</strong> Current value (queue length, active connections)</li>
+          <li><strong>Histogram:</strong> Distribution of latency, memory, RU cost</li>
+        </ul>
+
+        <h3>Logs: Point-in-time events</h3>
+        <pre><code>{
+  "timestamp": "2026-06-16T14:23:45Z",
+  "level": "WARNING",
+  "message": "Cosmos 429 RateLimitExceeded",
+  "operation_Id": "abc-123",
+  "user_Id": "user-456",
+  "statusCode": 429,
+  "retryAfterMs": 1000
+}</code></pre>
+      </section>
+
+      <section id="otel">
+        <h2>OpenTelemetry Instrumentation</h2>
+        
+        <h3>Basic activity (span) with tags:</h3>
+        <pre><code>var activity = new Activity("GetChat").Start();
+activity.SetTag("tenant.id", tenantId);
+activity.SetTag("chat.id", chatId);
+activity.SetTag("db.system", "cosmosdb");
+
+try {
+  var chat = await cosmos.GetChatById(chatId);
+  activity.SetTag("http.status_code", 200);
+  return chat;
+} catch (Exception ex) {
+  activity.SetTag("exception.type", ex.GetType().Name);
+  activity.SetTag("http.status_code", 500);
+  throw;
+}</code></pre>
+
+        <h3>Custom metrics (meters):</h3>
+        <pre><code>// Counter: track events
+meterProvider.CreateCounter<long>("chats.created")
+  .Add(1, new("tenant.id", tenantId));
+
+// Gauge: track current state
+meterProvider.CreateGauge<int>("cosmos.active_connections")
+  .Record(activeConnCount);
+
+// Histogram: track distribution
+meterProvider.CreateHistogram<long>("cosmos.query_duration_ms")
+  .Record(durationMs, new("operation", "GetById"));</code></pre>
+      </section>
+
+      <section id="red-metrics">
+        <h2>RED & USE Metrics</h2>
+        
+        <h3>RED (Request-driven services)</h3>
+        <ul>
+          <li><strong>Rate:</strong> Requests per second</li>
+          <li><strong>Errors:</strong> Failed requests (4xx, 5xx)</li>
+          <li><strong>Duration:</strong> Latency distribution (p50, p95, p99)</li>
+        </ul>
+
+        <h3>USE (Resource-driven services)</h3>
+        <ul>
+          <li><strong>Utilization:</strong> % resources in use (CPU, memory, Cosmos RU/s)</li>
+          <li><strong>Saturation:</strong> Queue depth, backlog (waiting for resource)</li>
+          <li><strong>Errors:</strong> Hardware/resource errors (OOMKill, connection refused)</li>
+        </ul>
+
+        <div class="card" style="background: rgba(124, 58, 237, 0.05); border-left: 4px solid var(--secondary);">
+          <p><strong>Pro tip:</strong> Monitor percentiles (p95, p99), not averages. An average can hide spikes. "99th percentile latency < 500ms" is a better SLI than "average latency < 200ms".</p>
+        </div>
+      </section>
+
+      <section id="kql-queries">
+        <h2>KQL Queries</h2>
+        
+        <h3>Query 1: Availability % by domain</h3>
+        <pre><code>requests
+| where timestamp > ago(1h)
+| where cloud_RoleName startswith "Chat"
+| summarize 
+    total = count(),
+    success = countif(success == true)
+    by cloud_RoleName
+| extend availability_pct = (success * 100.0) / total
+| project cloud_RoleName, availability_pct</code></pre>
+
+        <h3>Query 2: Error rate trend</h3>
+        <pre><code>requests
+| where timestamp > ago(24h)
+| where cloud_RoleName == "Chat.Frontend"
+| summarize
+    total = count(),
+    errors = countif(success == false)
+    by bin(timestamp, 5m)
+| extend error_rate_pct = (errors * 100.0) / total
+| render timechart</code></pre>
+
+        <h3>Query 3: Single request trace</h3>
+        <pre><code>union requests, dependencies, exceptions
+| where operation_Id == "abc-123-def-456"
+| project timestamp, type, name, duration, resultCode, message
+| order by timestamp asc</code></pre>
+
+        <h3>Query 4: Dependency latency p99</h3>
+        <pre><code>dependencies
+| where timestamp > ago(1d)
+| where target == "cosmos.azure.com"
+| summarize p99_duration = percentile(duration, 99)
+    by name, target
+| order by p99_duration desc</code></pre>
+      </section>
+
+      <section id="dashboards-alerts">
+        <h2>Dashboards & Alerts</h2>
+        
+        <h3>SLO Dashboard structure</h3>
+        <ul>
+          <li><strong>Top line:</strong> Current error budget remaining (% of budget, time remaining in month)</li>
+          <li><strong>Charts:</strong> Availability %, latency p99, error rate over 30d</li>
+          <li><strong>Burn rate:</strong> Fast window (1h) and slow window (6h) — if both alert, you have a real issue</li>
+          <li><strong>Dependency health:</strong> Status of Cosmos, Service Bus, Key Vault</li>
+          <li><strong>Capacity:</strong> Cosmos RU/s usage, App Service CPU/memory</li>
+        </ul>
+
+        <h3>Alert rule structure</h3>
+        <pre><code>Alert Name: "Chat.Frontend Error Rate > 1%"
+Scope: Chat.Frontend
+Condition: error_rate_pct > 1
+Window: 5 minutes
+Frequency: 1 minute
+Severity: Sev-2
+Action: PagerDuty webhook + Teams notification
+Remediation: "See runbook: https://..."</code></pre>
+      </section>
+
+      <section id="interview">
+        <h2>💬 Interview Q&A</h2>
+        
+        <h3>Q1: What's the difference between observability and monitoring?</h3>
+        <p><strong>A:</strong> <em>Monitoring = looking at known metrics (uptime, CPU). Observability = ability to ask new questions about the system without modifying code. With observability, you ask "why did latency spike?" and find the answer from existing traces. With just monitoring, you're blind.</em></p>
+
+        <h3>Q2: How would you correlate a user's failed request with a backend error?</h3>
+        <p><strong>A:</strong> <em>Every request gets a correlation ID (operation_Id) at the entry point. It's passed downstream in headers: X-Correlation-ID or W3C traceparent. A union KQL query on operation_Id across requests, dependencies, exceptions shows the full call chain.</em></p>
+
+        <h3>Q3: Your p99 latency spiked. How do you investigate?</h3>
+        <p><strong>A:</strong> <em>I'd look at the latency distribution histogram (p50, p95, p99, max). If p99 spiked but p50 is fine, it's outliers. I'd query dependencies: which one is slow? Is it Cosmos (429 rate-limit?), network, or slow client? I'd look at traces for slow requests and find the slowest operation.</em></p>
+
+        <h3>Q4: How do you set a good error budget alert?</h3>
+        <p><strong>A:</strong> <em>Use multi-window burn-rate alerts: fast (1h window, alert if 14.4x burn rate) and slow (6h window, alert if 6x burn rate). Alert only when BOTH fire—that means you have a sustained, real issue, not a blip.</em></p>
+
+        <h3>Q5: You emit 1 million metrics per minute. How do you not go broke?</h3>
+        <p><strong>A:</strong> <em>Cardinality control: don't emit per-user or per-request metrics. Use dimensions (tenant, region, status) instead of creating new metric names. Aggregate at source before sending. Sample high-volume traces (keep 1% of successful requests, 100% of errors).</em></p>
+      </section>
+
+      <section>
+        <h2>✅ Observability Readiness Checklist</h2>
+        
+        <div class="card">
+          <h3>Knowledge</h3>
+          <ul>
+            <li>☐ I can name the 3 pillars (traces, metrics, logs)</li>
+            <li>☐ I understand RED metrics (Rate, Errors, Duration)</li>
+            <li>☐ I know how correlation IDs link traces</li>
+            <li>☐ I can write a basic KQL query</li>
+            <li>☐ I can explain burn-rate alerts</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Operational</h3>
+          <ul>
+            <li>☐ I've read an SLO dashboard and understood error budget</li>
+            <li>☐ I've traced a failing request using correlation ID</li>
+            <li>☐ I've written 4 KQL queries (availability, errors, trace, dependency latency)</li>
+            <li>☐ I've set an alert and tested the webhook</li>
+            <li>☐ I've added OTel instrumentation to code</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Next Steps</h3>
+          <ul>
+            <li>→ Capstone: "Ship, Observe, Recover" (end-to-end observability)</li>
+            <li>→ Capstone: "Data + Observability" (KQL deep-dive)</li>
+          </ul>
+        </div>
+      </section>
+
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="./git-github-actions.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← Git / GitHub Actions</a>
+        <a href="../index.html#technologies" class="btn btn-secondary" style="flex: 1; text-align: center;">All Technologies →</a>
+        <a href="./aks-containers.html" class="btn btn-secondary" style="flex: 1; text-align: center;">AKS / Containers →</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
+</html>

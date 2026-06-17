@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labs & Capstones - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles">Roles</a></li>
+          <li><a href="../index.html#technologies">Technologies</a></li>
+          <li><a href="./labs-index.html" class="active">Labs</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <button class="sidebar-close">✕</button>
+    
+    <div class="sidebar-section">
+      <div class="sidebar-title">🎯 Roles</div>
+      <a href="../roles/sre-perspective.html" class="sidebar-link">Site Reliability Engineer</a>
+      <a href="../roles/devops-engineer.html" class="sidebar-link">DevOps Engineer</a>
+      <a href="../roles/data-engineer.html" class="sidebar-link">Data Engineer</a>
+      <a href="../roles/technical-support.html" class="sidebar-link">Technical Support</a>
+      <a href="../roles/tpm-perspective.html" class="sidebar-link">Technical Program Manager</a>
+      <a href="../roles/platform-engineer.html" class="sidebar-link">Platform Engineer</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">⚙️ Technologies</div>
+      <a href="../technologies/csharp-dotnet.html" class="sidebar-link">C# / .NET 10</a>
+      <a href="../technologies/react-typescript.html" class="sidebar-link">React / TypeScript</a>
+      <a href="../technologies/api-integrations.html" class="sidebar-link">API Integrations</a>
+      <a href="../technologies/agentic-ai.html" class="sidebar-link">Agentic AI</a>
+      <a href="../technologies/bicep-arm.html" class="sidebar-link">Bicep / ARM</a>
+      <a href="../technologies/yaml-pipelines.html" class="sidebar-link">YAML / Pipelines</a>
+      <a href="../technologies/git-github-actions.html" class="sidebar-link">Git / GitHub Actions</a>
+      <a href="../technologies/observability.html" class="sidebar-link">Observability</a>
+      <a href="../technologies/aks-containers.html" class="sidebar-link">AKS / Containers</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">🧪 Labs</div>
+      <a href="./labs-index.html" class="sidebar-link active">Lab Index</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="container">
+      <!-- BREADCRUMB -->
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <span>Labs & Capstones</span>
+      </div>
+
+      <!-- HERO -->
+      <section class="hero">
+        <h1>🧪 Labs & Capstone Scenarios</h1>
+        <p>Hands-on, self-graded exercises and end-to-end scenario drills</p>
+      </section>
+
+      <!-- HOW LABS WORK -->
+      <section>
+        <h2>How Labs Work</h2>
+        
+        <div class="card" style="background: rgba(124, 58, 237, 0.05); border-left: 4px solid var(--secondary);">
+          <h3>Lab Structure</h3>
+          <p><strong>Each lab:</strong></p>
+          <ul>
+            <li>📝 <strong>Scenario</strong> — The problem you're solving</li>
+            <li>🎯 <strong>Acceptance criteria</strong> — How you know you're done</li>
+            <li>⏱️ <strong>Estimated time</strong> — 30 min to 4 hours</li>
+            <li>💡 <strong>Hints</strong> — Nudges, not solutions</li>
+            <li>✅ <strong>Self-grading checklist</strong> — Verify your work</li>
+          </ul>
+        </div>
+
+        <h3>Types of Labs</h3>
+        <ul>
+          <li><strong>Inline labs</strong> — In each role/tech guide (3–5 per guide, 30–60 min each)</li>
+          <li><strong>Capstone labs</strong> — End-to-end scenarios (2–4 hours, cross-role/cross-tech)</li>
+          <li><strong>Incident drills</strong> — Timed operational exercises (30 min, fire-and-chaos scenario)</li>
+        </ul>
+      </section>
+
+      <!-- INLINE LABS INDEX -->
+      <section>
+        <h2>Inline Labs by Guide</h2>
+        <p>Every role and technology guide contains 3–5 hands-on labs. Here's the full index:</p>
+
+        <h3>Role Guides Labs</h3>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-badge">Role</div>
+            <h3><a href="../roles/sre-perspective.html#labs" style="color: inherit;">SRE</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ SLO dashboard (KQL + App Insights)</li>
+              <li>✓ Slot-swap + rollback practice</li>
+              <li>✓ Incident drill (triage + mitigate)</li>
+              <li>✓ Kill one toil item</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Role</div>
+            <h3><a href="../roles/devops-engineer.html#labs" style="color: inherit;">DevOps</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Reproduce CI locally</li>
+              <li>✓ Add approval gate to prod</li>
+              <li>✓ Parameterize a template</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Role</div>
+            <h3><a href="../roles/data-engineer.html#labs" style="color: inherit;">Data Eng</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Partition-key design</li>
+              <li>✓ Idempotent change-feed</li>
+              <li>✓ Anomaly-detection KQL</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Role</div>
+            <h3><a href="../roles/technical-support.html#labs" style="color: inherit;">Technical Support</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Trace one failed request</li>
+              <li>✓ Write escalation ticket</li>
+              <li>✓ Draft 3 status updates</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Role</div>
+            <h3><a href="../roles/tpm-perspective.html#labs" style="color: inherit;">TPM</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Cross-domain dependency map</li>
+              <li>✓ 5-row risk register</li>
+              <li>✓ Read SLO dashboard</li>
+              <li>✓ Write status update</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Role</div>
+            <h3><a href="../roles/platform-engineer.html#labs" style="color: inherit;">Platform Eng</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Add Common helper</li>
+              <li>✓ Extend paved road</li>
+              <li>✓ Encode a standard</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Technology Labs</h3>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-badge">Tech</div>
+            <h3><a href="../technologies/csharp-dotnet.html#labs" style="color: inherit;">C# / .NET</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Wire a scoped service</li>
+              <li>✓ Fix blocking call</li>
+              <li>✓ Idempotent processor</li>
+              <li>✓ Error code enum</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Tech</div>
+            <h3><a href="../technologies/react-typescript.html#labs" style="color: inherit;">React / TS</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ API response type + union</li>
+              <li>✓ Form with useActionState</li>
+              <li>✓ Redux slice + thunk</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Tech</div>
+            <h3><a href="../technologies/api-integrations.html#labs" style="color: inherit;">API Integration</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Redesign endpoint as RESTful</li>
+              <li>✓ Typed client + fake handler</li>
+              <li>✓ Add resilience</li>
+              <li>✓ Design idempotent POST</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Tech</div>
+            <h3><a href="../technologies/agentic-ai.html#labs" style="color: inherit;">Agentic AI</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Define a tool</li>
+              <li>✓ Mini-RAG</li>
+              <li>✓ Add guardrails</li>
+              <li>✓ Eval harness</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Tech</div>
+            <h3><a href="../technologies/bicep-arm.html#labs" style="color: inherit;">Bicep / ARM</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Author Cosmos module</li>
+              <li>✓ Deployment stacks lifecycle</li>
+              <li>✓ Read what-if</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Tech</div>
+            <h3><a href="../technologies/yaml-pipelines.html#labs" style="color: inherit;">YAML / Pipelines</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Path-filter scope</li>
+              <li>✓ Parameterize template</li>
+              <li>✓ Approval gate</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Tech</div>
+            <h3><a href="../technologies/observability.html#labs" style="color: inherit;">Observability</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Instrument operation</li>
+              <li>✓ Define RED metrics</li>
+              <li>✓ Write 4 KQL queries</li>
+              <li>✓ Build SLO workbook</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-badge">Tech</div>
+            <h3><a href="../technologies/aks-containers.html#labs" style="color: inherit;">AKS / Containers</a></h3>
+            <ul style="margin-left: 0; list-style: none;">
+              <li>✓ Containerize .NET API</li>
+              <li>✓ Choose compute</li>
+              <li>✓ Deploy with probes</li>
+              <li>✓ Canary rollout</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CAPSTONE LABS -->
+      <section>
+        <h2>Capstone Labs (End-to-End Scenarios)</h2>
+        <p>Each capstone is a 2–4 hour scenario spanning multiple roles and technologies. Self-graded against acceptance criteria.</p>
+
+        <h3>Capstone 1: Ship, Observe, Recover</h3>
+        <div class="card">
+          <div class="card-badge">🚀 Full DevOps loop</div>
+          <p><strong>Goal:</strong> Ship a .NET API to production, observe it with SLOs and dashboards, inject failures, and roll back safely.</p>
+          
+          <h4>Scenario</h4>
+          <p>You're deployed a new Chat.Frontend feature to production. Your SRE teammate sets up an SLO dashboard. An alert fires: error rate spiked to 5%. You investigate via KQL, identify the cause, roll back, and postmortem.</p>
+
+          <h4>Acceptance Criteria</h4>
+          <ul>
+            <li>✓ Built a .NET API with 3 endpoints</li>
+            <li>✓ Authored Bicep infra (App Service + Application Insights)</li>
+            <li>✓ Created a CI pipeline (build → test → deploy → swap)</li>
+            <li>✓ Instrumented code with OTel (spans + custom metrics)</li>
+            <li>✓ Created SLO dashboard (latency + error rate + custom metric)</li>
+            <li>✓ Set burn-rate alerts (slow + fast windows)</li>
+            <li>✓ Ran a failure injection (killed a downstream service)</li>
+            <li>✓ Rolled back in &lt; 1 minute</li>
+            <li>✓ Wrote a postmortem with 2 action items</li>
+          </ul>
+
+          <h4>Time: 3–4 hours</h4>
+        </div>
+
+        <h3>Capstone 2: Data + Observability</h3>
+        <div class="card">
+          <div class="card-badge">📊 Data pipeline + analytics</div>
+          <p><strong>Goal:</strong> Model Cosmos data, build an idempotent change-feed processor, emit custom events, and query anomalies in KQL.</p>
+
+          <h4>Scenario</h4>
+          <p>The Refunds domain processes refund requests. You design the Cosmos partition key, write a Service Bus consumer with idempotent tracking, emit events to App Insights, and set up a KQL workbook for funnel analysis + anomaly detection.</p>
+
+          <h4>Acceptance Criteria</h4>
+          <ul>
+            <li>✓ Designed Cosmos DB schema (account, database, container, partition key)</li>
+            <li>✓ Justified partition key choice (access pattern analysis)</li>
+            <li>✓ Wrote idempotent Service Bus processor (duplicate detection by processed-id)</li>
+            <li>✓ Emitted trackEvent with custom dimensions (tenant, status, amount)</li>
+            <li>✓ Wrote 4 KQL queries (funnel, cohort, time-series, anomaly)</li>
+            <li>✓ Created parameterized workbook</li>
+            <li>✓ Set alert rule for anomalies</li>
+          </ul>
+
+          <h4>Time: 2–3 hours</h4>
+        </div>
+
+        <h3>Capstone 3: Agentic Support Assistant</h3>
+        <div class="card">
+          <div class="card-badge">🤖 AI + guardrails + evals</div>
+          <p><strong>Goal:</strong> Expose a typed API client as an agent tool, add RAG grounding, implement safety guardrails, and build an evaluation harness.</p>
+
+          <h4>Scenario</h4>
+          <p>Build a support assistant agent that can look up customer orders and refunds (via mocked APIs), fetch relevant help articles (Azure AI Search hybrid search), answer questions with citations, and knows when to escalate to a human (guardrails).</p>
+
+          <h4>Acceptance Criteria</h4>
+          <ul>
+            <li>✓ Defined 2 tools (GetOrder, GetRefund) wrapping typed clients</li>
+            <li>✓ Integrated Azure AI Search (hybrid search: keyword + vector)</li>
+            <li>✓ Injected search results into prompt with citations</li>
+            <li>✓ Implemented guardrails (max 5 iterations, confirmation for refunds, jailbreak detection)</li>
+            <li>✓ Instrumented with OTel (model call spans, tool call spans, latency metrics)</li>
+            <li>✓ Built eval harness (10 test cases, scorer function)</li>
+            <li>✓ Ran continuous eval and tracked score over time</li>
+          </ul>
+
+          <h4>Time: 3–4 hours</h4>
+        </div>
+
+        <h3>Capstone 4: Container Platform Slice</h3>
+        <div class="card">
+          <div class="card-badge">☸️ Kubernetes + autoscaling + canary</div>
+          <p><strong>Goal:</strong> Containerize a microservice, deploy to AKS with proper resource requests/limits, set up autoscaling, and do a canary rollout.</p>
+
+          <h4>Scenario</h4>
+          <p>The Search service needs to run on AKS for higher compute. You containerize it (multi-stage Dockerfile, non-root user), deploy to AKS with readiness/liveness probes, set up HPA (CPU-based) + KEDA (queue-based), and do a safe canary rollout with metrics validation.</p>
+
+          <h4>Acceptance Criteria</h4>
+          <ul>
+            <li>✓ Wrote multi-stage Dockerfile (build + runtime, &lt; 500MB final image)</li>
+            <li>✓ Deployed to AKS with resource requests (CPU/memory)</li>
+            <li>✓ Set readiness probe (/health) + liveness probe (/alive)</li>
+            <li>✓ Configured HPA (target CPU 70%, scale 2–10 replicas)</li>
+            <li>✓ Configured KEDA (scale on Service Bus queue length)</li>
+            <li>✓ Authored Bicep for Deployment + Service + Ingress</li>
+            <li>✓ Ran load test and validated autoscaling</li>
+            <li>✓ Performed canary rollout (10% → 50% → 100% traffic over 3 stages)</li>
+            <li>✓ Verified metrics during canary (error rate stayed &lt; 0.1%)</li>
+          </ul>
+
+          <h4>Time: 4 hours</h4>
+        </div>
+      </section>
+
+      <!-- INCIDENT DRILL -->
+      <section>
+        <h2>Incident Drill (30 minutes, timed)</h2>
+        
+        <div class="card" style="background: rgba(239, 68, 68, 0.05); border-left: 4px solid var(--error);">
+          <h3>Scenario: Chat.Frontend outage</h3>
+          <p><strong>Time: 30 minutes</strong></p>
+          
+          <p><strong>At 09:00 UTC:</strong> Alert fires: Chat.Frontend error rate 50%, latency p99 5s.</p>
+
+          <h4>Your tasks:</h4>
+          <ol>
+            <li><strong>Declare severity</strong> (SEV-1, SEV-2, SEV-3) + page on-call team</li>
+            <li><strong>Triage</strong> (5 min): Use KQL union query by operation_Id to find the failing service</li>
+            <li><strong>Identify</strong> (10 min): Root cause (Cosmos hot partition, Service Bus deadlock, dependency timeout)</li>
+            <li><strong>Mitigate</strong> (5 min): Scale Cosmos RU/s, kill problematic consumer, or roll back</li>
+            <li><strong>Comms</strong> (5 min): Draft 3 status updates (incident start, investigating, resolved)</li>
+            <li><strong>Postmortem items</strong> (5 min): List 3 preventative actions (monitoring, testing, automation)</li>
+          </ol>
+
+          <h4>Success criteria:</h4>
+          <ul>
+            <li>✓ Severity declared within 1 minute</li>
+            <li>✓ Root cause identified within 12 minutes</li>
+            <li>✓ Mitigation action taken by 18 minutes</li>
+            <li>✓ Status updates are clear and concise</li>
+            <li>✓ At least 1 postmortem action is concrete (automation, alert, test case)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- NEXT STEPS -->
+      <section>
+        <h2>How to Get Started</h2>
+        <div class="card">
+          <ol>
+            <li><strong>Pick a role guide</strong> and read it (15 min)</li>
+            <li><strong>Do the inline labs</strong> in that guide (30–60 min each, 3–4 labs)</li>
+            <li><strong>Pick a capstone</strong> that resonates with you (2–4 hours)</li>
+            <li><strong>Do the incident drill</strong> for operational fluency (30 min)</li>
+            <li><strong>Build a portfolio</strong> — document what you learned and share on GitHub</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- NAVIGATION -->
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="../index.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← Back to Home</a>
+        <a href="../roles/sre-perspective.html" class="btn btn-secondary" style="flex: 1; text-align: center;">Start with SRE →</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- SCROLL BUTTONS -->
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps Engineer Perspective - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles" class="active">Roles</a></li>
+          <li><a href="../index.html#technologies">Technologies</a></li>
+          <li><a href="../labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <button class="sidebar-close">✕</button>
+    <div class="sidebar-section">
+      <div class="sidebar-title">🎯 Roles</div>
+      <a href="./sre-perspective.html" class="sidebar-link">Site Reliability Engineer</a>
+      <a href="./devops-engineer.html" class="sidebar-link active">DevOps Engineer</a>
+      <a href="./data-engineer.html" class="sidebar-link">Data Engineer</a>
+      <a href="./technical-support.html" class="sidebar-link">Technical Support</a>
+      <a href="./tpm-perspective.html" class="sidebar-link">Technical Program Manager</a>
+      <a href="./platform-engineer.html" class="sidebar-link">Platform Engineer</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">⚙️ Technologies</div>
+      <a href="../technologies/csharp-dotnet.html" class="sidebar-link">C# / .NET 10</a>
+      <a href="../technologies/react-typescript.html" class="sidebar-link">React / TypeScript</a>
+      <a href="../technologies/api-integrations.html" class="sidebar-link">API Integrations</a>
+      <a href="../technologies/agentic-ai.html" class="sidebar-link">Agentic AI</a>
+      <a href="../technologies/bicep-arm.html" class="sidebar-link">Bicep / ARM</a>
+      <a href="../technologies/yaml-pipelines.html" class="sidebar-link">YAML / Pipelines</a>
+      <a href="../technologies/git-github-actions.html" class="sidebar-link">Git / GitHub Actions</a>
+      <a href="../technologies/observability.html" class="sidebar-link">Observability</a>
+      <a href="../technologies/aks-containers.html" class="sidebar-link">AKS / Containers</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <a href="../index.html#roles">Roles</a> <span>/</span> <span>DevOps Engineer</span>
+      </div>
+
+      <section class="hero">
+        <h1>The DevOps Engineer Perspective</h1>
+        <p>From feature code to production: CI/CD, gates, safety, and shipping at scale</p>
+      </section>
+
+      <div class="toc">
+        <div class="toc-title">📋 On This Page</div>
+        <ul>
+          <li><a href="#what-owns">What you own</a></li>
+          <li><a href="#ci-flow">CI flow deep-dive</a></li>
+          <li><a href="#cd-flow">CD flow & release gates</a></li>
+          <li><a href="#safety">Safety mechanisms</a></li>
+          <li><a href="#interview">Interview Q&A</a></li>
+          <li><a href="#checklist">Readiness Checklist</a></li>
+        </ul>
+      </div>
+
+      <section id="what-owns">
+        <h2>🧠 What You Own</h2>
+        <p>DevOps engineers own the <strong>pipeline</strong> — the automated path from developer commit to production deployment:</p>
+        <ul>
+          <li>✅ Build pipeline (compile → test → lint → sign)</li>
+          <li>✅ Infrastructure as Code (Bicep templates, deployment validation)</li>
+          <li>✅ Release gates (approvals, test automation, health checks)</li>
+          <li>✅ Deployment orchestration (blue-green slot swaps, canary, instant rollback)</li>
+          <li>✅ Secrets management (Key Vault integration, rotation automation)</li>
+          <li>✅ Artifact versioning (immutable artifacts, traceability)</li>
+        </ul>
+      </section>
+
+      <section id="ci-flow">
+        <h2>CI Flow: From Commit to Artifact</h2>
+        <p>When a developer pushes to main, the CI pipeline runs automatically:</p>
+        
+        <div class="mermaid">
+flowchart LR
+    Push["Developer<br/>git push main"]
+    Trigger["Trigger:<br/>Azure Pipelines"]
+    Build["Build<br/>dotnet build"]
+    Test["Test<br/>dotnet test"]
+    Format["Format Check<br/>dotnet format --verify"]
+    Lint["Lint<br/>bicep lint"]
+    Sign["Sign<br/>Artifact"]
+    Store["Store<br/>Artifact Repository"]
+    
+    Push --> Trigger
+    Trigger --> Build
+    Build -->|❌ fail| Failed["❌ FAILED<br/>notify dev"]
+    Build -->|✅ pass| Test
+    Test -->|❌ fail| Failed
+    Test -->|✅ pass| Format
+    Format -->|❌ fail| Failed
+    Format -->|✅ pass| Lint
+    Lint -->|❌ fail| Failed
+    Lint -->|✅ pass| Sign
+    Sign --> Store
+    Store -->|✅ ready| Ready["✅ READY<br/>for deployment"]
+        </div>
+
+        <h3>Key practices:</h3>
+        <ul>
+          <li><strong>Fast feedback:</strong> Parallel jobs (build + lint + format check)</li>
+          <li><strong>No manual steps:</strong> Everything automated, repeatable</li>
+          <li><strong>Immutable artifacts:</strong> Once built + signed, never rebuilt</li>
+          <li><strong>Traceability:</strong> Build ID → commit SHA → deployed version</li>
+        </ul>
+      </section>
+
+      <section id="cd-flow">
+        <h2>CD Flow: From Artifact to Production</h2>
+        
+        <div class="card" style="background: rgba(16, 185, 129, 0.05); border-left: 4px solid var(--success);">
+          <h3>The safe deploy pattern</h3>
+          <p><strong>Deploy to staging first.</strong> Validate. <strong>Then promote to production.</strong> If issues, rollback by swapping slots back.</p>
+        </div>
+
+        <div class="mermaid">
+flowchart LR
+    Artifact["Artifact"]
+    DeployStagingBicep["Deploy to<br/>staging via Bicep"]
+    HealthCheck["Health Check<br/>/health endpoint"]
+    Smoke["Smoke Tests"]
+    Approve["🚨 Manual Approval<br/>ready for prod?"]
+    SwapSlots["Swap Slots<br/>staging → production"]
+    Monitor["Monitor<br/>error rate + latency"]
+    
+    Artifact --> DeployStagingBicep
+    DeployStagingBicep -->|❌| RollbackStaging["Rollback staging"]
+    DeployStagingBicep -->|✅| HealthCheck
+    HealthCheck -->|❌| RollbackStaging
+    HealthCheck -->|✅| Smoke
+    Smoke -->|❌| RollbackStaging
+    Smoke -->|✅| Approve
+    Approve -->|❌ wait| Approve
+    Approve -->|✅ approve| SwapSlots
+    SwapSlots -->|❌ error| RollbackProd["Instant rollback<br/>production ← staging"]
+    SwapSlots -->|✅| Monitor
+    Monitor -->|✅ ok| Done["✅ LIVE"]
+        </div>
+      </section>
+
+      <section id="safety">
+        <h2>🛡️ Safety Mechanisms</h2>
+        <ul>
+          <li><strong>Blue-green slots:</strong> Production and staging slots on App Service. Swap is atomic, rollback is instant.</li>
+          <li><strong>Health gates:</strong> Staging must pass /health before approval prompt shows.</li>
+          <li><strong>Approval gates:</strong> Manual step before production deployment. Requires reviewer sign-off.</li>
+          <li><strong>Artifact signing:</strong> Ensures deployed code matches built code.</li>
+          <li><strong>Bicep what-if:</strong> Preview changes before applying. Catch destructive changes.</li>
+        </ul>
+      </section>
+
+      <section id="interview">
+        <h2>💬 Interview Q&A</h2>
+        
+        <h3>Q1: Walk me through a pipeline build failure. How do you unblock it?</h3>
+        <p><strong>A:</strong> <em>I check the build logs. If it's a compile error, the dev fixes it and pushes again. If it's a test flake, we investigate: is it truly flaky or did the code break it? If lint fails (format/style), we run `dotnet format` locally and commit. The pipeline is a CI gate—it shouldn't block on infrastructure issues.</em></p>
+
+        <h3>Q2: How do you handle secrets in the pipeline?</h3>
+        <p><strong>A:</strong> <em>Secrets never appear in build logs. They live in Key Vault. The pipeline references them via variable groups (Azure Pipelines) or GitHub secrets (GitHub Actions). These are injected at runtime and masked in logs (shown as ***).</em></p>
+
+        <h3>Q3: Your production slot swap failed. What do you do?</h3>
+        <p><strong>A:</strong> <em>Swap back instantly by swapping slots again (production ← staging). This puts the old code back in production. Then investigate what went wrong: was the staging health check wrong? Did a dependency go down? Fix it, run smoke tests again, and re-attempt the swap.</em></p>
+
+        <h3>Q4: How do you version artifacts?</h3>
+        <p><strong>A:</strong> <em>Artifacts are versioned by build ID (incrementing counter) + git commit SHA. A deployment is traceable: you know exactly which code was built when, and which version is running in which slot.</em></p>
+
+        <h3>Q5: What's the difference between "deploy" and "release"?</h3>
+        <p><strong>A:</strong> <em>Deploy = put code on production infrastructure. Release = make it available to users. You can deploy 10 versions but keep showing version 9 to users (feature flags / traffic routing). This separates deployment risk from business risk.</em></p>
+      </section>
+
+      <section id="checklist">
+        <h2>✅ DevOps Readiness Checklist</h2>
+        
+        <div class="card">
+          <h3>Knowledge</h3>
+          <ul>
+            <li>☐ I can name the 5 stages of a CI/CD pipeline</li>
+            <li>☐ I understand blue-green slots and instant rollback</li>
+            <li>☐ I can explain the difference between deployment and release</li>
+            <li>☐ I know how to parameterize a Bicep deployment</li>
+            <li>☐ I can write a simple pipeline YAML (build → test → deploy)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Operational</h3>
+          <ul>
+            <li>☐ I've triggered a pipeline manually and watched it complete</li>
+            <li>☐ I've done a slot swap and verified traffic moved</li>
+            <li>☐ I've rolled back a deployment in production</li>
+            <li>☐ I've added a manual approval gate to a pipeline</li>
+            <li>☐ I've read and interpreted build logs to debug a failure</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Next Steps</h3>
+          <ul>
+            <li>→ Deep-dive: <a href="../technologies/yaml-pipelines.html">YAML / Azure Pipelines</a></li>
+            <li>→ Deep-dive: <a href="../technologies/bicep-arm.html">Bicep / ARM</a></li>
+            <li>→ Capstone: "Ship, Observe, Recover"</li>
+          </ul>
+        </div>
+      </section>
+
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="./sre-perspective.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← SRE Perspective</a>
+        <a href="../index.html#roles" class="btn btn-secondary" style="flex: 1; text-align: center;">All Roles →</a>
+        <a href="./data-engineer.html" class="btn btn-secondary" style="flex: 1; text-align: center;">Data Engineer →</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The SRE Perspective - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles" class="active">Roles</a></li>
+          <li><a href="../index.html#technologies">Technologies</a></li>
+          <li><a href="../labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <button class="sidebar-close">✕</button>
+    
+    <div class="sidebar-section">
+      <div class="sidebar-title">🎯 Roles</div>
+      <a href="./sre-perspective.html" class="sidebar-link active">Site Reliability Engineer</a>
+      <a href="./devops-engineer.html" class="sidebar-link">DevOps Engineer</a>
+      <a href="./data-engineer.html" class="sidebar-link">Data Engineer</a>
+      <a href="./technical-support.html" class="sidebar-link">Technical Support</a>
+      <a href="./tpm-perspective.html" class="sidebar-link">Technical Program Manager</a>
+      <a href="./platform-engineer.html" class="sidebar-link">Platform Engineer</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">⚙️ Technologies</div>
+      <a href="../technologies/csharp-dotnet.html" class="sidebar-link">C# / .NET 10</a>
+      <a href="../technologies/react-typescript.html" class="sidebar-link">React / TypeScript</a>
+      <a href="../technologies/api-integrations.html" class="sidebar-link">API Integrations</a>
+      <a href="../technologies/agentic-ai.html" class="sidebar-link">Agentic AI</a>
+      <a href="../technologies/bicep-arm.html" class="sidebar-link">Bicep / ARM</a>
+      <a href="../technologies/yaml-pipelines.html" class="sidebar-link">YAML / Pipelines</a>
+      <a href="../technologies/git-github-actions.html" class="sidebar-link">Git / GitHub Actions</a>
+      <a href="../technologies/observability.html" class="sidebar-link">Observability</a>
+      <a href="../technologies/aks-containers.html" class="sidebar-link">AKS / Containers</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">🧪 Labs</div>
+      <a href="../labs/labs-index.html" class="sidebar-link">Lab Index</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="container">
+      <!-- BREADCRUMB -->
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../index.html#roles">Roles</a>
+        <span>/</span>
+        <span>Site Reliability Engineer</span>
+      </div>
+
+      <!-- TABLE OF CONTENTS -->
+      <div class="toc">
+        <div class="toc-title">📋 On This Page</div>
+        <ul>
+          <li><a href="#what-sre-owns">What an SRE owns</a></li>
+          <li><a href="#reliability-architecture">Reliability architecture</a></li>
+          <li><a href="#slos-error-budgets">SLIs, SLOs & error budgets</a></li>
+          <li><a href="#incident-response">Incident response</a></li>
+          <li><a href="#toil-reduction">Toil reduction</a></li>
+          <li><a href="#interview-qa">Interview Q&A</a></li>
+          <li><a href="#checklist">SRE Readiness Checklist</a></li>
+        </ul>
+      </div>
+
+      <!-- HERO -->
+      <section class="hero">
+        <h1>The SRE Perspective</h1>
+        <p>How a production .NET 10 / Azure monorepo looks through an SRE's eyes — and how to practice the craft.</p>
+        <p style="font-size: 0.9rem; color: var(--text-secondary);">
+          <strong>Audience:</strong> Aspiring/practicing SREs, on-call engineers<br>
+          <strong>Companion guides:</strong> <a href="../technologies/observability.html">Observability</a> · 
+          <a href="../technologies/aks-containers.html">AKS/Containers</a> · 
+          <a href="../technologies/bicep-arm.html">Bicep/ARM</a> · 
+          <a href="../technologies/yaml-pipelines.html">YAML/Pipelines</a>
+        </p>
+      </section>
+
+      <!-- CONTENT -->
+      <section id="what-sre-owns">
+        <h2>🧠 What an SRE owns here</h2>
+        <p>SRE is <strong>software engineering applied to operations</strong>. In this monorepo the SRE owns <strong>reliability outcomes</strong>, not features:</p>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Pillar</th>
+              <th>What it means in this repo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SLIs/SLOs</strong></td>
+              <td>Latency, availability, error-rate per domain frontend (Chat, Refunds, Search…)</td>
+            </tr>
+            <tr>
+              <td><strong>Error budgets</strong></td>
+              <td>How much unreliability is allowed before features freeze</td>
+            </tr>
+            <tr>
+              <td><strong>Toil reduction</strong></td>
+              <td>Automate slot swaps, cert rotation, scaling, backups</td>
+            </tr>
+            <tr>
+              <td><strong>Incident response</strong></td>
+              <td>On-call, triage via correlation IDs, mitigation, postmortems</td>
+            </tr>
+            <tr>
+              <td><strong>Capacity & cost</strong></td>
+              <td>Cosmos RU/s, App Service plans, AKS node pools</td>
+            </tr>
+            <tr>
+              <td><strong>Release safety</strong></td>
+              <td>Blue-green slot swaps, canary, instant rollback</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="mermaid">
+flowchart TB
+    subgraph SREDomain["SRE ownership boundary"]
+        SLO["SLOs & Error Budgets"]
+        OBS["Observability: App Insights + KQL + OTel"]
+        REL["Release safety: slot swap / canary / rollback"]
+        CAP["Capacity & cost: Cosmos RU, plans, AKS"]
+        INC["Incident response & postmortems"]
+    end
+    DEV["Developers"] -->|ship features| REL
+    REL -->|deployed to| PROD["Production: App Service + Functions + AKS"]
+    PROD -->|telemetry| OBS
+    OBS -->|breaches| SLO
+    SLO -->|burn rate alert| INC
+    INC -->|action items| DEV
+    CAP --> PROD
+        </div>
+      </section>
+
+      <section id="reliability-architecture">
+        <h2>🏗️ The Reliability Architecture</h2>
+        <p>The platform is multi-domain. Each domain has a <strong>Frontend</strong> (App Service, ASP.NET Core) and a <strong>Backend</strong> (Azure Functions, isolated worker), backed by <strong>Cosmos DB</strong>, <strong>Blob/Queue/Table storage</strong>, <strong>Service Bus</strong>, <strong>Key Vault</strong>, and <strong>Application Insights</strong>.</p>
+        
+        <div class="mermaid">
+flowchart LR
+    U["Users"]
+    FD["Azure Front Door<br/>CDN"]
+    AppSvc["App Service Frontend<br/>staging + production slots"]
+    Cosmos["Cosmos DB"]
+    SB["Service Bus"]
+    Func["Azure Functions<br/>Backend"]
+    Blob["Blob/Queue/<br/>Table"]
+    KV["Key Vault"]
+    AI["Application Insights"]
+    LA["Log Analytics<br/>KQL"]
+    DASH["Dashboards<br/>Alerts"]
+    
+    U --> FD
+    FD --> AppSvc
+    AppSvc --> Cosmos
+    AppSvc --> SB
+    SB --> Func
+    Func --> Cosmos
+    Func --> Blob
+    AppSvc --> KV
+    Func --> KV
+    AppSvc -.->|telemetry| AI
+    Func -.->|telemetry| AI
+    AI --> LA
+    LA --> DASH
+        </div>
+
+        <h3>SRE reliability levers per layer</h3>
+        <ul>
+          <li><strong>Front Door</strong> — health probes, WAF, failover routing between regions</li>
+          <li><strong>App Service</strong> — staging/production slots, autoscale rules, health-check path <code>/health</code></li>
+          <li><strong>Functions</strong> — concurrency limits, retry policies, dead-letter handling</li>
+          <li><strong>Cosmos</strong> — autoscale RU/s, partition-key hot-spot avoidance, PITR backup</li>
+          <li><strong>Service Bus</strong> — lock renewal, max-delivery-count → dead-letter, prefetch tuning</li>
+          <li><strong>Key Vault</strong> — secret/cert rotation, expiry alerts</li>
+        </ul>
+      </section>
+
+      <section id="slos-error-budgets">
+        <h2>SLIs, SLOs & Error Budgets</h2>
+        
+        <h3>Definitions</h3>
+        <ul>
+          <li><strong>SLI</strong> (Indicator): a measured number, e.g. <em>proportion of requests &lt; 500 ms</em></li>
+          <li><strong>SLO</strong> (Objective): the target, e.g. <em>99.9% of requests succeed over 30 days</em></li>
+          <li><strong>Error budget</strong>: <code>1 - SLO</code>. At 99.9% you get <strong>43m 12s</strong> of downtime/month</li>
+        </ul>
+
+        <table>
+          <thead>
+            <tr>
+              <th>SLO</th>
+              <th>Monthly error budget</th>
+              <th>Weekly</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>99%</td>
+              <td>7h 18m</td>
+              <td>1h 41m</td>
+            </tr>
+            <tr>
+              <td>99.9%</td>
+              <td>43m 12s</td>
+              <td>10m 5s</td>
+            </tr>
+            <tr>
+              <td>99.95%</td>
+              <td>21m 36s</td>
+              <td>5m 2s</td>
+            </tr>
+            <tr>
+              <td>99.99%</td>
+              <td>4m 19s</td>
+              <td>1m</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Defining an availability SLI in KQL</h3>
+        <pre><code>// Availability SLI: successful requests / total over 5m windows
+requests
+| where timestamp > ago(30d)
+| where cloud_RoleName == "Chat.Frontend"
+| summarize
+    total = count(),
+    good  = countif(success == true and duration < 1000)
+    by bin(timestamp, 5m)
+| extend availability = (good * 100.0) / total
+| project timestamp, availability</code></pre>
+      </section>
+
+      <section id="incident-response">
+        <h2>Incident Response</h2>
+        
+        <h3>The SRE on-call loop</h3>
+        <p>When an alert fires, the SRE on-call follows this playbook:</p>
+        
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab: Run a 30-minute incident drill</div>
+          <div class="lab-box-content">
+            <strong>Scenario:</strong> Chat.Frontend latency spikes to 5s for 15 minutes<br>
+            <strong>Task:</strong> Detect, triage, mitigate, postmortem<br>
+            <strong>Acceptance:</strong> You can name 3 possible causes and 1 mitigation action per cause
+          </div>
+        </div>
+      </section>
+
+      <section id="toil-reduction">
+        <h2>Toil Reduction</h2>
+        <p><strong>Toil</strong> = operational work that is manual, repetitive, and doesn't add long-term value. SRE goal: keep toil < 50% of time.</p>
+        
+        <h3>Common toil in this platform</h3>
+        <ul>
+          <li>⏱️ Rotating certificates (automated with Key Vault expiry alerts + Function trigger)</li>
+          <li>⏱️ Slot swaps after deployments (automated in pipeline)</li>
+          <li>⏱️ Scaling Cosmos during traffic spikes (automated with autoscale RU/s)</li>
+          <li>⏱️ Manual rollbacks (automated with instant swap)</li>
+          <li>⏱️ Creating backups (automated with PITR + weekly full snapshots)</li>
+        </ul>
+      </section>
+
+      <section id="interview-qa">
+        <h2>💬 Interview Q&A</h2>
+        
+        <h3>Q1: What's the difference between availability and reliability?</h3>
+        <p><strong>A:</strong> <em>Availability is how much time the service is running (uptime %), reliability is whether it works correctly when it is running (error rate). A service can be 99% available but 50% reliable if half the requests fail.</em></p>
+
+        <h3>Q2: How would you define SLOs for a multi-domain system?</h3>
+        <p><strong>A:</strong> <em>Each domain has its own Frontend SLO based on customer impact. e.g., Chat.Frontend: 99.9% availability + p99 latency &lt; 500ms. You aggregate across domains for a platform SLO. Asymmetric SLOs are OK — high-traffic domains can have tighter SLOs.</em></p>
+
+        <h3>Q3: Your error budget is exhausted mid-month. What happens?</h3>
+        <p><strong>A:</strong> <em>Feature freeze. No risky changes ship. Focus shifts to fixing reliability issues. This incentivizes developers to ship high-quality code and prevents a never-ending cycle of outages.</em></p>
+
+        <h3>Q4: Walk me through a slot-swap rollback.</h3>
+        <p><strong>A:</strong> <em>Production slot receives traffic. Staging has the new code. We validate staging (tests green, health-check path responds). We swap: now staging gets traffic, production is idle. If production (now idle) detects issues, we swap back instantly. Old code is still in memory on production, so rollback is < 1 second.</em></p>
+
+        <h3>Q5: How do you correlate a failed user request with backend failures?</h3>
+        <p><strong>A:</strong> <em>Each request gets a correlation ID (operation_Id) assigned at the gateway. We pass it through all downstream calls: Frontend → Backend → Cosmos → Service Bus. A union KQL query on operation_Id spans all logs/traces/metrics for that single request.</em></p>
+      </section>
+
+      <section id="checklist">
+        <h2>✅ SRE Readiness Checklist</h2>
+        
+        <div class="card">
+          <h3>Knowledge</h3>
+          <ul>
+            <li>☐ I can define SLI, SLO, error budget with examples</li>
+            <li>☐ I understand the reliability architecture (slot swap, autoscale, PITR, alerts)</li>
+            <li>☐ I know the on-call playbook (detect → triage → mitigate → postmortem)</li>
+            <li>☐ I can write a KQL query to compute availability</li>
+            <li>☐ I understand burn-rate alerts (slow + fast windows)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Operational</h3>
+          <ul>
+            <li>☐ I've done a manual slot swap and rollback</li>
+            <li>☐ I've triage a production incident using correlation IDs</li>
+            <li>☐ I've read and written an SLO workbook in App Insights</li>
+            <li>☐ I've written 3 alert rules (latency, error rate, custom metric)</li>
+            <li>☐ I can explain one toil item and its automation</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Next Steps</h3>
+          <ul>
+            <li>→ Learn <a href="../technologies/observability.html">Observability (App Insights/KQL/OTel)</a></li>
+            <li>→ Do the <strong>capstone</strong> lab: "Ship, Observe, Recover"</li>
+            <li>→ Read <a href="../roles/tpm-perspective.html">TPM Perspective</a> to understand risk/release gates</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- NAVIGATION -->
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="./devops-engineer.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← DevOps Engineer</a>
+        <a href="../index.html#roles" class="btn btn-secondary" style="flex: 1; text-align: center;">All Roles →</a>
+        <a href="./data-engineer.html" class="btn btn-secondary" style="flex: 1; text-align: center;">Data Engineer →</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- SCROLL BUTTONS -->
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
+</html>
