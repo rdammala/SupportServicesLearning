@@ -1,9 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPM Perspective - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles" class="active">Roles</a></li>
+          <li><a href="../index.html#technologies">Technologies</a></li>
+          <li><a href="../labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <a href="../index.html#roles">Roles</a> <span>/</span> <span>Technical Program Manager</span>
+      </div>
+
+      <section class="hero">
+        <h1>The Technical Program Manager Perspective</h1>
+        <p>Owning roadmaps, timelines, cross-team dependencies, and shipping with confidence</p>
+      </section>
+
+      <section>
+        <h2>📊 What a TPM Owns</h2>
+        <table>
+          <thead><tr><th>Area</th><th>Ownership</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Roadmap planning</strong></td><td>Feature prioritization, timeline, dependencies</td></tr>
+            <tr><td><strong>Cross-team coordination</strong></td><td>Frontend, Backend, SRE, Data alignment</td></tr>
+            <tr><td><strong>Risk identification</strong></td><td>What could fail? Mitigation plans</td></tr>
+            <tr><td><strong>Launch readiness</strong></td><td>Docs, support training, monitoring setup</td></tr>
+            <tr><td><strong>Communication</strong></td><td>Status updates, blockers, decision docs</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>🔧 The TPM Toolkit</h2>
+
+        <h3>OKR (Objectives & Key Results)</h3>
+        <p><strong>Objective:</strong> Qualitative goal (e.g., "Improve refund speed")<br/>
+        <strong>Key Results:</strong> Measurable outcomes (e.g., "Reduce refund processing time from 3 days to 1 day")</p>
+
+        <h3>RACI Matrix</h3>
+        <table>
+          <thead><tr><th>Task</th><th>Responsible</th><th>Accountable</th><th>Consulted</th><th>Informed</th></tr></thead>
+          <tbody>
+            <tr><td>Design refund flow</td><td>Design team</td><td>PM</td><td>Frontend + Backend</td><td>SRE, Support</td></tr>
+            <tr><td>Implement backend</td><td>Backend team</td><td>Tech Lead</td><td>Frontend</td><td>TPM, SRE</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Risk Register</h3>
+        <pre><code>| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| Cosmos throttling under load | High | High | Load test early, auto-scale RUs |
+| 3rd party payment API outage | Medium | High | Fallback queue, circuit breaker |
+| Team resource shortage | Medium | Medium | Hire contractor or descope |
+</code></pre>
+      </section>
+
+      <section>
+        <h2>📅 Launch Checklist</h2>
+        <ul>
+          <li>☑️ Engineering: Code complete, tested, reviewed</li>
+          <li>☑️ Observability: Dashboards, alerts, logs ready</li>
+          <li>☑️ Support: Trained, runbooks ready, escalation paths clear</li>
+          <li>☑️ Docs: API docs, customer-facing guides written</li>
+          <li>☑️ Communications: Announcement draft, stakeholder alignment</li>
+          <li>☑️ Rollback: Tested, team knows when/how to rollback</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>💬 Interview Q&A</h2>
+
+        <h3>Q1: A feature is slipping 3 weeks. What do you do?</h3>
+        <p><strong>A:</strong> <em>Escalate immediately. Understand the root cause (scope creep? technical difficulty? resource constrained?). Discuss options with team: cut scope, add resources, or rescope timeline. Communicate impact to stakeholders ASAP, don't wait until last day.</em></p>
+
+        <h3>Q2: Two teams disagree on priority. How do you resolve?</h3>
+        <p><strong>A:</strong> <em>Align on OKRs and business outcomes, not opinions. If both teams' work supports the same OKR, sequence them with clear dependencies. If conflicting OKRs, escalate to leadership for priority decision.</em></p>
+
+        <h3>Q3: You discover a risk the day before launch. What's your decision?</h3>
+        <p><strong>A:</strong> <em>Depends on severity. High impact + unmitigated? Delay launch, fix it properly. Low risk + mitigated? Launch with close monitoring + rollback plan ready. Never ship knowing a critical blocker exists.</em></p>
+      </section>
+
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="./technical-support.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← Technical Support</a>
+        <a href="../index.html#roles" class="btn btn-secondary" style="flex: 1; text-align: center;">All Roles →</a>
+        <a href="./platform-engineer.html" class="btn btn-secondary" style="flex: 1; text-align: center;">Platform Engineer →</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>

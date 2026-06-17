@@ -1,9 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YAML & Azure Pipelines - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav><ul><li><a href="../index.html">Home</a></li><li><a href="../index.html#technologies" class="active">Technologies</a></li></ul></nav>
+      <button class="theme-toggle">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>YAML & Pipelines</span></div>
+      <section class="hero">
+        <h1>YAML & Azure Pipelines</h1>
+        <p>CI/CD configuration as code: build, test, deploy stages with gates and approvals</p>
+      </section>
+
+      <section>
+        <h2>Pipeline Anatomy</h2>
+        <pre><code>trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildJob
+        steps:
+          - script: dotnet build
+          - script: dotnet test
+
+  - stage: Deploy
+    condition: succeeded()
+    jobs:
+      - deployment: DeployProd
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              - script: ./deploy.sh</code></pre>
+
+        <h3>Key concepts</h3>
+        <ul>
+          <li><strong>Trigger:</strong> What branches start the pipeline</li>
+          <li><strong>Stage:</strong> Logical grouping (Build, Test, Deploy)</li>
+          <li><strong>Condition:</strong> When to run (succeeded(), failed(), always())</li>
+          <li><strong>Approval:</strong> Manual gate between stages</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Best Practices</h2>
+        <ul>
+          <li>✅ Use variables for secrets (reference Azure Key Vault)</li>
+          <li>✅ Gate production deployments with approvals</li>
+          <li>✅ Cache dependencies to speed builds</li>
+          <li>✅ Parallelize independent jobs</li>
+          <li>❌ Hardcode secrets in YAML</li>
+          <li>❌ Deploy directly on commit (always test first)</li>
+        </ul>
+      </section>
+
+      <div style="text-align: center; margin-top: 3rem; color: var(--text-secondary);">
+        <p>Full YAML reference available at <a href="https://docs.microsoft.com/azure/devops/pipelines/yaml-schema" target="_blank">Azure Pipelines documentation</a></p>
+        <p><a href="../index.html">← Back to Home</a></p>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn">▲</button>
+    <button id="scroll-down" class="scroll-btn">▼</button>
+  </div>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>

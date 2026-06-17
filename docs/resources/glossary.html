@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossary - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="./glossary.html" class="active">Resources</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <span>Glossary</span>
+      </div>
+
+      <section class="hero">
+        <h1>SupportServices Glossary</h1>
+        <p>Key terms and concepts used throughout the platform</p>
+      </section>
+
+      <div class="search-container">
+        <input type="text" class="search-input glossary-search" placeholder="Search glossary terms..." />
+        <div class="search-results"></div>
+      </div>
+
+      <section id="glossary-terms">
+        <h2>📖 Terms</h2>
+
+        <div class="glossary-item">
+          <h3>Correlation ID (Operation ID)</h3>
+          <p>A unique identifier that follows a request across all services and components. Used to trace a single user action from frontend → backend → database → service bus → function.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Change Feed (Cosmos)</h3>
+          <p>An ordered, durable stream of INSERT/UPDATE/DELETE events from a Cosmos container. Powers materialized views, search indexing, and event-driven processors.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>RU (Request Unit)</h3>
+          <p>Cosmos DB pricing unit. Every read/write consumes RUs. 1 KB read = ~1 RU. Throttling (429) happens when you exceed provisioned RUs.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Partition Key</h3>
+          <p>The field used to distribute data across physical partitions in Cosmos. Must be high-cardinality, evenly-distributed, and query-aligned. Bad partition key = hot partition = throttling.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>SLO (Service Level Objective)</h3>
+          <p>Target reliability (e.g., "99.9% availability"). Error budget = 100% - SLO (e.g., 99.9% = 43 minutes downtime/month).</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Error Budget</h3>
+          <p>Acceptable downtime within a period. If SLO = 99.9%, error budget = 0.1%. Once spent, stop deploying and focus on reliability.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Circuit Breaker</h3>
+          <p>Resilience pattern: Closed (normal) → Open (failing, reject fast) → Half-Open (test). Prevents cascading failures by fast-failing instead of retrying.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Exponential Backoff</h3>
+          <p>Retry strategy: wait 1s, then 2s, then 4s, then 8s... Prevents thundering herd (all clients retrying simultaneously).</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Idempotency</h3>
+          <p>Operation can be executed multiple times with same effect as once. Critical for retries and distributed systems.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Slot Swap (Blue-Green)</h3>
+          <p>Deployment technique: deploy to staging slot, verify, then swap prod ↔ staging traffic. Enables instant rollback if needed.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Health Probe</h3>
+          <p>Endpoint that returns status (healthy/unhealthy). Load balancers use it to remove unhealthy instances from rotation.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>KQL (Kusto Query Language)</h3>
+          <p>Query language for Azure Data Explorer and Log Analytics. Used to query traces, metrics, logs, and build dashboards.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>OTel (OpenTelemetry)</h3>
+          <p>Vendor-neutral standard for instrumentation (traces, metrics, logs). Language-agnostic SDK for collecting observability data.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Bicep</h3>
+          <p>Modern declarative language for Azure IaC. Compiles to ARM templates. Cleaner syntax than JSON, better readability.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>RACI Matrix</h3>
+          <p>Responsibility assignment: Responsible (does work), Accountable (final say), Consulted (asked opinion), Informed (told result).</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>OKR (Objectives & Key Results)</h3>
+          <p>Goal-setting framework: Objective (what) + Key Results (how to measure). Used for quarterly planning and alignment.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Paved Road</h3>
+          <p>Recommended, tested way to do something. Make right way easy way (templates, tooling, guardrails).</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>DDD (Domain-Driven Design)</h3>
+          <p>Design approach: model software around business domain. Separate bounded contexts, use ubiquitous language across team.</p>
+        </div>
+
+        <div class="glossary-item">
+          <h3>Service Mesh</h3>
+          <p>Infrastructure layer for inter-service communication. Handles retries, timeouts, circuit breaking, mutual TLS transparently.</p>
+        </div>
+      </section>
+
+      <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <style>
+    .glossary-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .glossary-item h3 {
+      margin: 0 0 0.75rem 0;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    .glossary-item p {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .glossary-search {
+      margin-bottom: 2rem;
+    }
+  </style>
+
+  <script src="../assets/js/script.js"></script>
+  <script>
+    // Glossary search functionality
+    const glossarySearch = document.querySelector('.glossary-search');
+    const glossaryItems = document.querySelectorAll('.glossary-item');
+
+    if (glossarySearch) {
+      glossarySearch.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        glossaryItems.forEach(item => {
+          const text = item.textContent.toLowerCase();
+          item.style.display = text.includes(query) ? 'block' : 'none';
+        });
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,9 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic AI - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav><ul><li><a href="../index.html">Home</a></li></ul></nav>
+      <button class="theme-toggle">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>Agentic AI</span></div>
+      <section class="hero">
+        <h1>Agentic AI & Intelligent Automation</h1>
+        <p>Building AI agents with tool-use, reasoning, and planning capabilities</p>
+      </section>
+
+      <section>
+        <h2>Agent Architecture</h2>
+        <p>An AI agent iterates: Observe → Reason → Plan → Act → Repeat</p>
+        <ul>
+          <li><strong>Observe:</strong> Read system state, inputs, context</li>
+          <li><strong>Reason:</strong> LLM evaluates situation and chooses action</li>
+          <li><strong>Plan:</strong> Break complex goal into steps (if needed)</li>
+          <li><strong>Act:</strong> Call tools (APIs, databases), execute actions</li>
+          <li><strong>Repeat:</strong> Process tool results, continue until goal achieved</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Tool-Use Pattern</h2>
+        <pre><code>// Define tools available to the agent
+const tools = [
+  {
+    name: "get_refund_status",
+    description: "Fetch the current status of a refund request",
+    parameters: { refund_id: "string" }
+  },
+  {
+    name: "approve_refund",
+    description: "Approve a pending refund",
+    parameters: { refund_id: "string", reason: "string" }
+  }
+];
+
+// Agent calls tools dynamically
+const response = await llm.chat([
+  { role: "user", content: "Approve refund #12345" }
+], tools);
+
+// LLM returns tool calls, agent executes them
+for (const toolCall of response.tool_calls) {
+  const result = await executeTool(toolCall.name, toolCall.args);
+}</code></pre>
+      </section>
+
+      <section>
+        <h2>Best Practices</h2>
+        <ul>
+          <li>✅ Keep tools focused and well-named</li>
+          <li>✅ Add error handling (tool calls may fail)</li>
+          <li>✅ Monitor LLM reasoning (log reasoning steps)</li>
+          <li>✅ Set max iterations (prevent infinite loops)</li>
+          <li>✅ Audit tool outputs (agent depends on tool accuracy)</li>
+        </ul>
+      </section>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <p><a href="../index.html">← Back to Home</a></p>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn">▲</button>
+    <button id="scroll-down" class="scroll-btn">▼</button>
+  </div>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>

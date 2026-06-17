@@ -221,6 +221,42 @@ function applyTheme(theme) {
   }
 }
 
+// ===== BOOKMARKS FEATURE =====
+function initBookmarks() {
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  const bookmarkBtn = document.querySelector('[data-bookmark]');
+  
+  if (!bookmarkBtn) return;
+
+  // Load bookmarks from localStorage
+  let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+  
+  // Update button state
+  const isBookmarked = bookmarks.some(b => b.path === currentPage);
+  updateBookmarkButton(bookmarkBtn, isBookmarked);
+
+  bookmarkBtn.addEventListener('click', function() {
+    const pageTitle = document.querySelector('h1')?.textContent || 'Bookmarked Page';
+    const pagePath = currentPage;
+    
+    const bookmarkIndex = bookmarks.findIndex(b => b.path === pagePath);
+    if (bookmarkIndex !== -1) {
+      bookmarks.splice(bookmarkIndex, 1);
+      updateBookmarkButton(bookmarkBtn, false);
+    } else {
+      bookmarks.push({ title: pageTitle, path: pagePath, date: new Date().toISOString() });
+      updateBookmarkButton(bookmarkBtn, true);
+    }
+    
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  });
+}
+
+function updateBookmarkButton(btn, isBookmarked) {
+  btn.textContent = isBookmarked ? '⭐ Bookmarked' : '☆ Bookmark';
+  btn.style.color = isBookmarked ? 'var(--primary)' : 'inherit';
+}
+
 // ===== SEARCH FUNCTIONALITY =====
 function initSearch() {
   const searchInput = document.querySelector('.search-input');
@@ -228,14 +264,14 @@ function initSearch() {
   
   if (!searchInput || !searchResults) return;
 
-  // Build searchable index from page headings and links
+  // Build searchable index from all pages
   const searchIndex = [
     { title: 'Home', path: '/', type: 'page' },
     { title: 'SRE Perspective', path: '/roles/sre-perspective.html', type: 'role' },
     { title: 'DevOps Engineer', path: '/roles/devops-engineer.html', type: 'role' },
     { title: 'Data Engineer', path: '/roles/data-engineer.html', type: 'role' },
     { title: 'Technical Support', path: '/roles/technical-support.html', type: 'role' },
-    { title: 'TPM', path: '/roles/tpm-perspective.html', type: 'role' },
+    { title: 'TPM Perspective', path: '/roles/tpm-perspective.html', type: 'role' },
     { title: 'Platform Engineer', path: '/roles/platform-engineer.html', type: 'role' },
     { title: 'C# / .NET 10', path: '/technologies/csharp-dotnet.html', type: 'tech' },
     { title: 'React / TypeScript', path: '/technologies/react-typescript.html', type: 'tech' },
@@ -246,8 +282,22 @@ function initSearch() {
     { title: 'Git / GitHub Actions', path: '/technologies/git-github-actions.html', type: 'tech' },
     { title: 'Observability', path: '/technologies/observability.html', type: 'tech' },
     { title: 'AKS / Containers', path: '/technologies/aks-containers.html', type: 'tech' },
-    { title: 'Labs & Capstones', path: '/labs/labs-index.html', type: 'labs' }
+    { title: 'Labs & Capstones', path: '/labs/labs-index.html', type: 'labs' },
+    { title: 'Glossary', path: '/resources/glossary.html', type: 'resource' },
+    { title: 'Code Snippets', path: '/resources/code-snippets.html', type: 'resource' }
   ];
+
+  // Keyboard shortcut: / to focus search
+  document.addEventListener('keydown', function(e) {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+    // Escape to unfocus
+    if (e.key === 'Escape' && document.activeElement === searchInput) {
+      searchInput.blur();
+    }
+  });
 
   searchInput.addEventListener('input', function(e) {
     const query = e.target.value.toLowerCase().trim();
@@ -289,13 +339,161 @@ function initSearch() {
   });
 }
 
-// Initialize theme and search when DOM is ready
+// ===== SIDEBAR NAVIGATION =====
+function initSidebar() {
+  const navToggle = document.querySelector('.nav-toggle');
+  const sidebar = document.querySelector('.sidebar');
+  const sidebarClose = document.querySelector('.sidebar-close');
+  const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+  if (!navToggle || !sidebar) return;
+
+  navToggle.addEventListener('click', function() {
+    sidebar.classList.toggle('open');
+  });
+
+  if (sidebarClose) {
+    sidebarClose.addEventListener('click', function() {
+      sidebar.classList.remove('open');
+    });
+  }
+
+  // Close sidebar on link click (mobile)
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      if (window.innerWidth <= 1024) {
+        sidebar.classList.remove('open');
+      }
+    });
+  });
+
+  // Highlight active link
+  sidebarLinks.forEach(link => {
+    if (link.href === window.location.href || link.href.includes(window.location.pathname)) {
+      link.classList.add('active');
+    }
+  });
+}
+
+// ===== SCROLL FUNCTIONALITY =====
+function initScrollControls() {
+  const scrollUp = document.querySelector('#scroll-up');
+  const scrollDown = document.querySelector('#scroll-down');
+
+  if (!scrollUp || !scrollDown) return;
+
+  window.addEventListener('scroll', function() {
+    const scrollPos = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+    // Show/hide scroll-up button
+    scrollUp.style.display = scrollPos > 300 ? 'flex' : 'none';
+    
+    // Show/hide scroll-down button (hide near bottom)
+    scrollDown.style.display = scrollPos < docHeight - 300 ? 'flex' : 'none';
+  });
+
+  scrollUp.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  scrollDown.addEventListener('click', function() {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+  });
+}
+
+// ===== TABLE OF CONTENTS SMOOTH SCROLL =====
+function initTableOfContents() {
+  const tocLinks = document.querySelectorAll('.toc a');
+  
+  tocLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href').substring(1);
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+}
+
+// ===== COPY CODE BUTTONS =====
+function initCopyButtons() {
+  const codeBlocks = document.querySelectorAll('pre code');
+  
+  codeBlocks.forEach(code => {
+    const pre = code.parentElement;
+    const button = document.createElement('button');
+    button.textContent = '📋 Copy';
+    button.style.cssText = `
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    `;
+    
+    pre.style.position = 'relative';
+    pre.appendChild(button);
+    
+    pre.addEventListener('mouseenter', () => button.style.opacity = '1');
+    pre.addEventListener('mouseleave', () => button.style.opacity = '0');
+    
+    button.addEventListener('click', async function() {
+      const text = code.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = '✓ Copied!';
+        setTimeout(() => button.textContent = '📋 Copy', 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    });
+  });
+}
+
+// ===== INTERSECTION OBSERVER FOR FADE-IN =====
+function initFadeInAnimation() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('fade-in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  const elements = document.querySelectorAll('.card, .lab-box, section');
+  elements.forEach(el => observer.observe(el));
+}
+
+// Initialize everything when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
     initThemeToggle();
     initSearch();
+    initBookmarks();
+    initSidebar();
+    initScrollControls();
+    initTableOfContents();
+    initCopyButtons();
+    initFadeInAnimation();
   });
 } else {
   initThemeToggle();
   initSearch();
+  initBookmarks();
+  initSidebar();
+  initScrollControls();
+  initTableOfContents();
+  initCopyButtons();
+  initFadeInAnimation();
 }

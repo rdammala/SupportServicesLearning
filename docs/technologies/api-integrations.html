@@ -1,9 +1,254 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Integrations - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles">Roles</a></li>
+          <li><a href="../index.html#technologies" class="active">Technologies</a></li>
+          <li><a href="../labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <button class="sidebar-close">✕</button>
+    <div class="sidebar-section">
+      <div class="sidebar-title">⚙️ Technologies</div>
+      <a href="./observability.html" class="sidebar-link">Observability</a>
+      <a href="./csharp-dotnet.html" class="sidebar-link">C# / .NET 10</a>
+      <a href="./api-integrations.html" class="sidebar-link active">API Integrations</a>
+      <a href="./bicep-arm.html" class="sidebar-link">Bicep / ARM</a>
+      <a href="./yaml-pipelines.html" class="sidebar-link">YAML / Pipelines</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <a href="../index.html#technologies">Technologies</a> <span>/</span> <span>API Integrations</span>
+      </div>
+
+      <section class="hero">
+        <h1>API Integrations: Service-to-Service Communication</h1>
+        <p>Typed HTTP clients, auth handlers, resilience policies, and contract versioning for reliable inter-service calls</p>
+      </section>
+
+      <div class="toc">
+        <div class="toc-title">📋 On This Page</div>
+        <ul>
+          <li><a href="#typed-clients">Typed HTTP Clients</a></li>
+          <li><a href="#auth-handlers">Auth Handlers</a></li>
+          <li><a href="#resilience">Resilience Policies</a></li>
+          <li><a href="#versioning">Contract Versioning</a></li>
+          <li><a href="#interview">Interview Q&A</a></li>
+        </ul>
+      </div>
+
+      <section id="typed-clients">
+        <h2>🔗 Typed HTTP Clients</h2>
+        <p>Never use raw <code>HttpClient</code>. Wrap API calls in a typed client that:</p>
+        <ul>
+          <li>Encodes base URL, headers, authentication</li>
+          <li>Defines request/response contracts</li>
+          <li>Applies resilience policies (retries, timeouts)</li>
+          <li>Maps HTTP errors to domain exceptions</li>
+        </ul>
+
+        <h3>Pattern: Typed Client in DI</h3>
+        <pre><code>// Service interface
+public interface IRefundApiClient
+{
+    Task<RefundResponse> GetRefundAsync(string id);
+    Task CreateRefundAsync(RefundRequest request);
+}
+
+// Implementation
+public class RefundApiClient : IRefundApiClient
+{
+    private readonly HttpClient _httpClient;
+    
+    public RefundApiClient(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+    
+    public async Task<RefundResponse> GetRefundAsync(string id)
+    {
+        var response = await _httpClient.GetAsync($"/refunds/{id}");
+        return await MapResponseAsync<RefundResponse>(response);
+    }
+}
+
+// Register with resilience policy
+services.AddHttpClient<IRefundApiClient, RefundApiClient>(client =>
+{
+    client.BaseAddress = new Uri("https://refunds-api.azurewebsites.net");
+    client.DefaultRequestHeaders.Add("User-Agent", "SupportServices/1.0");
+})
+.AddPolicyHandler(GetRetryPolicy())
+.AddPolicyHandler(GetTimeoutPolicy());</code></pre>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab 1: Build a typed client</div>
+          <div class="lab-box-content">
+            <strong>Create:</strong> A typed HTTP client for a hypothetical "NotificationService" API<br><br>
+            <strong>Acceptance:</strong> Interface, implementation, 3 methods (Get, Create, List), error mapping
+          </div>
+        </div>
+      </section>
+
+      <section id="auth-handlers">
+        <h2>🔐 Authentication Handlers</h2>
+        <p>Use DelegatingHandler to inject auth tokens into every request without repeating code:</p>
+
+        <pre><code>// DelegatingHandler: intercepts every HTTP request
+public class BearerTokenHandler : DelegatingHandler
+{
+    private readonly ITokenProvider _tokenProvider;
+    
+    public BearerTokenHandler(ITokenProvider tokenProvider)
+    {
+        _tokenProvider = tokenProvider;
+    }
+    
+    protected override async Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request, 
+        CancellationToken cancellationToken)
+    {
+        var token = await _tokenProvider.GetTokenAsync();
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        return await base.SendAsync(request, cancellationToken);
+    }
+}
+
+// Register
+services.AddHttpClient<IRefundApiClient, RefundApiClient>()
+    .AddHttpMessageHandler<BearerTokenHandler>();</code></pre>
+
+        <h3>Service-to-Service (S2S) Patterns</h3>
+        <ul>
+          <li><strong>XToken (Xbox Live 3.0):</strong> Mutual TLS + signed request token</li>
+          <li><strong>Managed Identity:</strong> Azure AD token via IMDS (no secrets to rotate)</li>
+          <li><strong>API Key:</strong> Simple but less secure; rotate regularly</li>
+        </ul>
+      </section>
+
+      <section id="resilience">
+        <h2>💪 Resilience Policies</h2>
+        <p>Use Polly library to handle transient failures gracefully:</p>
+
+        <h3>Retry Policy</h3>
+        <pre><code>// Retry 3 times with exponential backoff
+var retryPolicy = Policy
+    .Handle<HttpRequestException>()
+    .Or<TimeoutRejectedException>()
+    .OrResult<HttpResponseMessage>(r => (int)r.StatusCode >= 500)
+    .WaitAndRetryAsync(
+        retryCount: 3,
+        sleepDurationProvider: attempt => 
+            TimeSpan.FromSeconds(Math.Pow(2, attempt))
+    );</code></pre>
+
+        <h3>Timeout Policy</h3>
+        <pre><code>var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromSeconds(5));</code></pre>
+
+        <h3>Circuit Breaker (stop hammering a failing service)</h3>
+        <pre><code>var circuitBreakerPolicy = Policy
+    .Handle<HttpRequestException>()
+    .OrResult<HttpResponseMessage>(r => (int)r.StatusCode >= 500)
+    .CircuitBreakerAsync(
+        handledEventsAllowedBeforeBreaking: 5,
+        durationOfBreak: TimeSpan.FromSeconds(30)
+    );</code></pre>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab 2: Stack resilience policies</div>
+          <div class="lab-box-content">
+            <strong>Task:</strong> Combine retry + timeout + circuit-breaker into a single policy<br><br>
+            <strong>Acceptance:</strong> Code with all 3 policies registered on a client
+          </div>
+        </div>
+      </section>
+
+      <section id="versioning">
+        <h2>🔄 Contract Versioning</h2>
+        <p>APIs evolve. Plan for backwards compatibility:</p>
+
+        <h3>URL versioning (explicit, clear for clients)</h3>
+        <pre><code>GET /v1/refunds/{id}
+GET /v2/refunds/{id}  // New fields, deprecated some old ones</code></pre>
+
+        <h3>Content negotiation (cleaner)</h3>
+        <pre><code>GET /refunds/{id}
+Accept: application/vnd.supportservices.v2+json</code></pre>
+
+        <h3>Deprecation headers</h3>
+        <pre><code>// Response header warns consumers before shutdown
+Deprecation: true
+Sunset: Sun, 01 Jan 2027 00:00:00 GMT</code></pre>
+
+        <h3>Contract changes safely</h3>
+        <ul>
+          <li>✅ Add new optional fields</li>
+          <li>✅ New endpoints alongside old ones</li>
+          <li>❌ Remove fields without warning period</li>
+          <li>❌ Rename fields without mapping</li>
+        </ul>
+      </section>
+
+      <section id="interview">
+        <h2>💬 Interview Q&A</h2>
+
+        <h3>Q1: How do you prevent thundering herd (all retries at once)?</h3>
+        <p><strong>A:</strong> <em>Exponential backoff with jitter: don't retry immediately, add randomness so all clients don't retry at the same millisecond. This prevents synchronized retries that overload the server.</em></p>
+
+        <h3>Q2: Your circuit breaker trips. How does traffic recover?</h3>
+        <p><strong>A:</strong> <em>Circuit breaker has states: Closed (normal) → Open (failing, rejects fast) → Half-Open (test single request). If half-open succeeds, transition to Closed. If fails, stay Open. This prevents cascading failures.</em></p>
+
+        <h3>Q3: Should you retry on 4xx errors?</h3>
+        <p><strong>A:</strong> <em>No. 4xx is client error (bad request, auth fail, not found). Retrying won't help; fix the request. Only retry 5xx and transient network errors.</em></p>
+
+        <h3>Q4: How do you handle API version mismatches in production?</h3>
+        <p><strong>A:</strong> <em>Version contract with deprecation windows. Warn 6 months before shutdown. Support v1 and v2 simultaneously during transition. Log if clients still use old version.</em></p>
+      </section>
+
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="./csharp-dotnet.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← C# / .NET</a>
+        <a href="../index.html#technologies" class="btn btn-secondary" style="flex: 1; text-align: center;">All Technologies →</a>
+        <a href="./bicep-arm.html" class="btn btn-secondary" style="flex: 1; text-align: center;">Bicep / ARM →</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>

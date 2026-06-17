@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Snippets - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="./code-snippets.html" class="active">Resources</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <span>Code Snippets</span>
+      </div>
+
+      <section class="hero">
+        <h1>Quick Reference: Code Snippets</h1>
+        <p>Copy-paste patterns for common operations</p>
+      </section>
+
+      <section>
+        <h2>🔵 C# / .NET 10</h2>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Async HttpClient Call</div>
+          <pre><code>public async Task<T> GetAsync<T>(string url)
+{
+    var response = await _httpClient.GetAsync(url);
+    response.EnsureSuccessStatusCode();
+    return await response.Content.ReadAsAsync<T>();
+}</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Dependency Injection Registration</div>
+          <pre><code>services.AddScoped<IRefundService, RefundService>();
+services.AddHttpClient<IExternalApi, ExternalApi>(client =>
+{
+    client.BaseAddress = new Uri("https://api.example.com");
+});
+services.AddOptions<AppSettings>()
+    .BindConfiguration("AppSettings")
+    .ValidateDataAnnotations();</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">LINQ Query</div>
+          <pre><code>var results = _refunds
+    .Where(r => r.Amount > 100 && r.Status == "Pending")
+    .OrderByDescending(r => r.CreatedAt)
+    .Select(r => new { r.Id, r.Amount })
+    .ToList();</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Cosmos Point Read</div>
+          <pre><code>var refund = await _container.ReadItemAsync<Refund>(
+    id: refundId,
+    partitionKey: new PartitionKey(userId)
+);</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Custom Telemetry Event</div>
+          <pre><code>var properties = new Dictionary<string, string>
+{
+    { "refund_id", refundId },
+    { "status", "approved" },
+    { "amount", amount.ToString() }
+};
+_telemetryClient.TrackEvent("RefundApproved", properties);</code></pre>
+        </div>
+      </section>
+
+      <section>
+        <h2>📊 KQL Queries</h2>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Trace Single Request</div>
+          <pre><code>union requests, dependencies, exceptions, traces
+| where operation_Id == "your-correlation-id"
+| project timestamp, itemType, name, success, resultCode
+| order by timestamp asc</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Error Rate by Operation</div>
+          <pre><code>requests
+| where timestamp > ago(1h)
+| summarize failed = sum(1 - toint(success)),
+            total = count() by name
+| extend error_rate = 100.0 * failed / total
+| order by error_rate desc</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">P95 Latency Timechart</div>
+          <pre><code>requests
+| where timestamp > ago(24h)
+| summarize p95_latency = percentile(duration, 95) by bin(timestamp, 5m)
+| render timechart</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Scope: Affected User Count</div>
+          <pre><code>exceptions
+| where timestamp > ago(1h)
+| summarize affected_users = dcount(tostring(customDimensions.userId)),
+            error_count = count() by type
+| order by error_count desc</code></pre>
+        </div>
+      </section>
+
+      <section>
+        <h2>🏗️ Bicep / IaC</h2>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Storage Account</div>
+          <pre><code>param location string = 'eastus'
+param environment string = 'dev'
+
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+  name: 'st${environment}${uniqueString(resourceGroup().id)}'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
+  }
+}
+
+output storageId string = storageAccount.id</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Module Usage</div>
+          <pre><code>module networking 'modules/network.bicep' = {
+  name: 'networkingDeployment'
+  params: {
+    location: location
+    vnetName: 'prod-vnet'
+  }
+}
+
+output vnetId string = networking.outputs.vnetId</code></pre>
+        </div>
+      </section>
+
+      <section>
+        <h2>🔄 PowerShell / Azure CLI</h2>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Deploy Bicep Template</div>
+          <pre><code>az deployment group create \
+  --resource-group my-rg \
+  --template-file main.bicep \
+  --parameters environment=prod location=eastus</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Query Cosmos DB</div>
+          <pre><code>az cosmosdb sql query \
+  --account-name myaccount \
+  --database-name mydb \
+  --container-name mycontainer \
+  --query 'SELECT * FROM c WHERE c.id = @id' \
+  --parameters '@id=12345'</code></pre>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-title">View App Insights Logs</div>
+          <pre><code>az monitor app-insights metrics show \
+  --app myappinsights \
+  --metric requests/count \
+  --aggregation total \
+  --interval PT1H</code></pre>
+        </div>
+      </section>
+
+      <section>
+        <h2>⚙️ YAML / Azure Pipelines</h2>
+
+        <div class="snippet-box">
+          <div class="snippet-title">Multi-Stage Pipeline</div>
+          <pre><code>trigger:
+  - main
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildJob
+        steps:
+          - script: dotnet build
+          - script: dotnet test
+
+  - stage: Deploy
+    condition: succeeded()
+    jobs:
+      - deployment: DeployProd
+        environment: production
+        strategy:
+          runOnce:
+            deploy:
+              - script: ./deploy.sh</code></pre>
+        </div>
+      </section>
+
+      <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <style>
+    .snippet-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .snippet-title {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .snippet-box pre {
+      margin: 1rem;
+      padding: 1rem;
+      background: var(--bg-darker, #000814);
+      border-radius: 4px;
+    }
+
+    .snippet-box code {
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+  </style>
+
+  <script src="../assets/js/script.js"></script>
+</body>
+</html>

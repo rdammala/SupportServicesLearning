@@ -1,9 +1,318 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Support Perspective - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles" class="active">Roles</a></li>
+          <li><a href="../index.html#technologies">Technologies</a></li>
+          <li><a href="../labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <button class="sidebar-close">✕</button>
+    <div class="sidebar-section">
+      <div class="sidebar-title">🎯 Roles</div>
+      <a href="./sre-perspective.html" class="sidebar-link">Site Reliability Engineer</a>
+      <a href="./devops-engineer.html" class="sidebar-link">DevOps Engineer</a>
+      <a href="./data-engineer.html" class="sidebar-link">Data Engineer</a>
+      <a href="./technical-support.html" class="sidebar-link active">Technical Support</a>
+      <a href="./tpm-perspective.html" class="sidebar-link">Technical Program Manager</a>
+      <a href="./platform-engineer.html" class="sidebar-link">Platform Engineer</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <a href="../index.html#roles">Roles</a> <span>/</span> <span>Technical Support</span>
+      </div>
+
+      <section class="hero">
+        <h1>The Technical Support Engineer Perspective</h1>
+        <p>Triaging, diagnosing, and escalating issues in a 13-domain Azure platform using correlation IDs and telemetry</p>
+      </section>
+
+      <div class="toc">
+        <div class="toc-title">📋 On This Page</div>
+        <ul>
+          <li><a href="#what-support-owns">What support owns</a></li>
+          <li><a href="#diagnosis-toolkit">Diagnosis toolkit</a></li>
+          <li><a href="#playbook">Symptom → cause playbook</a></li>
+          <li><a href="#escalation">Escalation evidence package</a></li>
+          <li><a href="#interview">Interview Q&A</a></li>
+          <li><a href="#checklist">Readiness Checklist</a></li>
+        </ul>
+      </div>
+
+      <section id="what-support-owns">
+        <h2>🧠 What Technical Support Owns</h2>
+        <p>Support is the human bridge between a customer symptom and an engineering fix. You own <strong>accurate diagnosis, fast mitigation guidance, and clean escalation</strong>.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Skill</th>
+              <th>Why it matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Reproduce & scope</strong></td>
+              <td>Distinguish one-off vs widespread</td>
+            </tr>
+            <tr>
+              <td><strong>Read telemetry</strong></td>
+              <td>Confirm with data, not guesses</td>
+            </tr>
+            <tr>
+              <td><strong>Correlation tracing</strong></td>
+              <td>Follow one request across services</td>
+            </tr>
+            <tr>
+              <td><strong>Escalation hygiene</strong></td>
+              <td>Give engineering everything to act fast</td>
+            </tr>
+            <tr>
+              <td><strong>Customer comms</strong></td>
+              <td>Clear, honest, ETA-driven updates</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="mermaid">
+flowchart LR
+    C["Customer report"] --> R["Reproduce + capture IDs"]
+    R --> S["Scope: one user vs many?"]
+    S --> T["Telemetry: requests/exceptions by operation_Id"]
+    T --> M{"Known issue / self-serve fix?"}
+    M -->|yes| Fix["Apply mitigation + document"]
+    M -->|no| E["Escalate with evidence package"]
+    E --> Eng["Engineering / SRE"]
+    Eng --> Post["Postmortem + KB update"]
+        </div>
+      </section>
+
+      <section id="diagnosis-toolkit">
+        <h2>🔍 The Diagnosis Toolkit</h2>
+
+        <h3>Correlation IDs are everything</h3>
+        <p>Every request gets an <strong>operation/correlation ID</strong> that flows App Service → Service Bus → Functions. Ask the customer (or capture from the response header) and pivot:</p>
+
+        <pre><code>union requests, dependencies, exceptions, traces
+| where operation_Id == "<correlation-id>"
+| project timestamp, itemType, name, success, resultCode, duration, message
+| order by timestamp asc</code></pre>
+
+        <p><em>This single query reconstructs the full journey of one failed request across services.</em></p>
+
+        <h3>Scope: is it one customer or many?</h3>
+        <pre><code>exceptions
+| where timestamp > ago(1h)
+| where cloud_RoleName == "Refunds.Frontend"
+| summarize affected = dcount(tostring(customDimensions.userId)),
+            occurrences = count()
+  by type, outerMessage
+| order by occurrences desc</code></pre>
+
+        <p><strong>If</strong> affected is large → likely incident, escalate fast.<br/>
+        <strong>If</strong> = 1 → user-specific, dig into their data.</p>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab 1: Trace a failed request</div>
+          <div class="lab-box-content">
+            <strong>Given:</strong> A correlation ID from a synthetic failure<br><br>
+            <strong>Task:</strong><br>
+            1. Run the union query and read the timeline<br>
+            2. Identify which dependency failed and the resultCode<br>
+            3. Decide: customer-specific or systemic?<br><br>
+            <strong>Acceptance:</strong> A 3-bullet diagnosis: where, why, blast radius
+          </div>
+        </div>
+      </section>
+
+      <section id="playbook">
+        <h2>📋 Symptom → Cause Playbook</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Symptom</th>
+              <th>Likely causes</th>
+              <th>First checks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>"Page is slow"</td>
+              <td>Cosmos throttling (429), cold start, downstream latency</td>
+              <td>p95 requests, dependencies resultCode 429</td>
+            </tr>
+            <tr>
+              <td>"I get an error submitting"</td>
+              <td>Validation, auth token expiry, dependency 5xx</td>
+              <td>exceptions by operation_Id</td>
+            </tr>
+            <tr>
+              <td>"I'm logged out"</td>
+              <td>Token/cert expiry, auth config</td>
+              <td>Auth dependency failures, Key Vault expiry</td>
+            </tr>
+            <tr>
+              <td>"Data is missing"</td>
+              <td>Eventual consistency, change-feed lag, soft delete</td>
+              <td>Lease lag, document schemaVersion/isDeleted</td>
+            </tr>
+            <tr>
+              <td>"Everything is down"</td>
+              <td>Bad deploy, region outage</td>
+              <td>Recent slot swap, Front Door health, Sev declaration</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>✅ Triage Runbook (First 10 minutes)</h3>
+        <ol>
+          <li>Capture <strong>correlation ID</strong>, timestamp, customer/tenant, exact action</li>
+          <li>Reproduce if possible; note the <strong>response code</strong></li>
+          <li>Run the <strong>union by operation_Id</strong> query</li>
+          <li>Scope with the <strong>dcount affected</strong> query</li>
+          <li>Check <strong>recent deploys</strong> (did a swap just happen?)</li>
+          <li>Mitigate if known; else <strong>escalate with evidence package</strong></li>
+        </ol>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab 2: Apply the playbook</div>
+          <div class="lab-box-content">
+            <strong>Scenario:</strong> Customer says "Getting 'Unauthorized' error after 2 PM"<br><br>
+            <strong>Task:</strong> Walk through the triage runbook—what would you check at each step?<br><br>
+            <strong>Acceptance:</strong> Ordered list of 6 diagnostic steps + KQL queries
+          </div>
+        </div>
+      </section>
+
+      <section id="escalation">
+        <h2>📤 The Escalation Evidence Package</h2>
+        <p>A good escalation = an engineer can act without asking you anything. <strong>Always include:</strong></p>
+
+        <ul>
+          <li><strong>Correlation ID(s)</strong> — the smoking gun</li>
+          <li><strong>Exact reproduction steps</strong> — "I click X, then Y, then error Z appears"</li>
+          <li><strong>Scope</strong> — 1 customer vs many? Since when?</li>
+          <li><strong>Telemetry artifacts</strong> — screenshot/export of the union query or exception</li>
+          <li><strong>Response code/message</strong> — "502 Bad Gateway" vs "400 Bad Request" guides investigation</li>
+          <li><strong>Timing</strong> — "Started 30 min ago after green deploy" → likely cause</li>
+          <li><strong>Mitigation if attempted</strong> — "Cleared cache, retried, still fails"</li>
+        </ul>
+
+        <h3>❌ Bad escalation</h3>
+        <p><em>"Customer says the app is broken. Can you look?"</em></p>
+
+        <h3>✅ Good escalation</h3>
+        <p><em>"Correlation ID XYZ: user johndoe@company gets 401 on POST /refunds at 2:15 PM UTC. Scope = 1 user. Reproduction: logged in, click Submit, error appears. Recent deploy: green Refunds.Frontend 2 PM. Exception: TokenExpiredException.</em>"</p>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab 3: Write an escalation email</div>
+          <div class="lab-box-content">
+            <strong>Given:</strong> Correlation ID, customer report, scope (3 users affected)<br><br>
+            <strong>Task:</strong> Draft a 5-sentence escalation with all required fields<br><br>
+            <strong>Acceptance:</strong> Email includes all 7 evidence artifacts
+          </div>
+        </div>
+      </section>
+
+      <section id="interview">
+        <h2>💬 Interview Q&A</h2>
+
+        <h3>Q1: A customer reports slowness, but telemetry shows normal latency. What do you do?</h3>
+        <p><strong>A:</strong> <em>I ask: which page/operation? Check network tab (is it client-side rendering?) vs server latency. If server latency is normal but customer is slow, it's likely client-side JS, network conditions, or perception. I'd also check if it's region-specific (CDN issues) or browser-specific (cache problem).</em></p>
+
+        <h3>Q2: Correlation ID shows a request went to Service, but Service says it never received it.</h3>
+        <p><strong>A:</strong> <em>That's a Service Bus queue/topic lag or message loss scenario. I'd check: lease lag (is the processor catching up?), if the message was dead-lettered (moved due to repeated failure), or if there's a network split. Service Bus queuing discipline matters here.</em></p>
+
+        <h3>Q3: You find a Cosmos 429 (throttled). How do you advise the customer?</h3>
+        <p><strong>A:</strong> <em>First: is this widespread or isolated? If isolated, it's normal Cosmos backpressure—retry with exponential backoff. If widespread, Cosmos might be under-provisioned. Escalate to the SRE to increase RUs or review partition key distribution. Customer immediate action: none; retry is automatic.</em></p>
+
+        <h3>Q4: How do you prevent "I thought it was fixed" loops?</h3>
+        <p><strong>A:</strong> <em>Document the root cause and fix in our KB. Share with team in standup. Add a regression test if applicable. When escalating, reference prior incidents so we catch patterns early.</em></p>
+
+        <h3>Q5: A customer says data went missing. How do you investigate?</h3>
+        <p><strong>A:</strong> <em>Check: (1) Is the data actually gone or just not visible (soft delete, schema version mismatch)? (2) Change feed lag—did the processor fall behind? (3) If truly missing, pull the audit log (or change-feed history) to see what happened. Escalate with the evidence of whether it was a delete operation or a system failure.</em></p>
+      </section>
+
+      <section id="checklist">
+        <h2>✅ Support Engineer Readiness Checklist</h2>
+
+        <div class="card">
+          <h3>Knowledge</h3>
+          <ul>
+            <li>☐ I can write a correlation ID union query</li>
+            <li>☐ I understand HTTP status codes (4xx = client, 5xx = server)</li>
+            <li>☐ I can scope an issue (1 user vs many)</li>
+            <li>☐ I know the symptom → cause playbook by heart</li>
+            <li>☐ I understand what goes in an escalation email</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Operational</h3>
+          <ul>
+            <li>☐ I've traced a production request end-to-end</li>
+            <li>☐ I've diagnosed a customer issue from correlation ID alone</li>
+            <li>☐ I've escalated a real incident with evidence</li>
+            <li>☐ I've written a KB article for a common issue</li>
+            <li>☐ I've attended a postmortem and asked "what changed?"</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Next Steps</h3>
+          <ul>
+            <li>→ Deep-dive: <a href="../technologies/observability.html">Observability (KQL)</a></li>
+            <li>→ Read: <a href="./sre-perspective.html">SRE Perspective</a> (understand what SREs own)</li>
+            <li>→ Capstone: "Ship, Observe, Recover" (end-to-end incident response)</li>
+          </ul>
+        </div>
+      </section>
+
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="./data-engineer.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← Data Engineer</a>
+        <a href="../index.html#roles" class="btn btn-secondary" style="flex: 1; text-align: center;">All Roles →</a>
+        <a href="./tpm-perspective.html" class="btn btn-secondary" style="flex: 1; text-align: center;">TPM Perspective →</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>

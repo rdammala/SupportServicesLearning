@@ -1,9 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React & TypeScript - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav><ul><li><a href="../index.html">Home</a></li></ul></nav>
+      <button class="theme-toggle">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>React & TypeScript</span></div>
+      <section class="hero">
+        <h1>React & TypeScript</h1>
+        <p>Component-based UI, state management, and type-safe development</p>
+      </section>
+
+      <section>
+        <h2>React Component</h2>
+        <pre><code>import React, { useState, useEffect } from 'react';
+
+interface Refund {
+  id: string;
+  amount: number;
+  status: 'pending' | 'approved' | 'rejected';
+}
+
+export const RefundForm: React.FC = () => {
+  const [refunds, setRefunds] = useState<Refund[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchRefunds = async () => {
+      setLoading(true);
+      const response = await fetch('/api/refunds');
+      const data = await response.json();
+      setRefunds(data);
+      setLoading(false);
+    };
+    fetchRefunds();
+  }, []);
+
+  return (
+    <div>
+      {loading ? <p>Loading...</p> : <RefundList refunds={refunds} />}
+    </div>
+  );
+};</code></pre>
+      </section>
+
+      <section>
+        <h2>TypeScript Benefits</h2>
+        <ul>
+          <li>✅ Compile-time type checking (catch errors early)</li>
+          <li>✅ IntelliSense/autocomplete</li>
+          <li>✅ Refactoring confidence (rename safely)</li>
+          <li>✅ Self-documenting code (interfaces)</li>
+        </ul>
+      </section>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <p><a href="../index.html">← Back to Home</a></p>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn">▲</button>
+    <button id="scroll-down" class="scroll-btn">▼</button>
+  </div>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>

@@ -1,9 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git & GitHub Actions - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav><ul><li><a href="../index.html">Home</a></li></ul></nav>
+      <button class="theme-toggle">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>Git & GitHub Actions</span></div>
+      <section class="hero">
+        <h1>Git & GitHub Actions</h1>
+        <p>Version control workflows, branching strategies, and CI/CD automation</p>
+      </section>
+
+      <section>
+        <h2>Git Workflow</h2>
+        <pre><code># Create feature branch
+git checkout -b feature/refund-approval
+
+# Make commits
+git add .
+git commit -m "Add refund approval logic"
+
+# Push to remote
+git push origin feature/refund-approval
+
+# Create PR, get review, merge
+git checkout main
+git pull origin main
+git merge feature/refund-approval</code></pre>
+
+        <h3>Branching Strategy (Git Flow)</h3>
+        <ul>
+          <li><strong>main:</strong> Production-ready, tagged releases</li>
+          <li><strong>develop:</strong> Integration branch for features</li>
+          <li><strong>feature/*:</strong> Individual feature work</li>
+          <li><strong>hotfix/*:</strong> Emergency production fixes</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>GitHub Actions</h2>
+        <p>Workflows triggered on events (push, PR, schedule)</p>
+
+        <pre><code>name: CI/CD
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: dotnet build
+      - name: Test
+        run: dotnet test</code></pre>
+      </section>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <p><a href="../index.html">← Back to Home</a></p>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn">▲</button>
+    <button id="scroll-down" class="scroll-btn">▼</button>
+  </div>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>

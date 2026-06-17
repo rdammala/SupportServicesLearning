@@ -1,9 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AKS & Containers - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav><ul><li><a href="../index.html">Home</a></li></ul></nav>
+      <button class="theme-toggle">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>AKS & Containers</span></div>
+      <section class="hero">
+        <h1>AKS & Kubernetes Containers</h1>
+        <p>Container orchestration, deployments, scaling, and observability on Azure Kubernetes Service</p>
+      </section>
+
+      <section>
+        <h2>Dockerfile Basics</h2>
+        <pre><code>FROM mcr.microsoft.com/dotnet/aspnet:10-alpine
+WORKDIR /app
+COPY --from=builder /app/publish .
+EXPOSE 80
+ENTRYPOINT ["dotnet", "Api.dll"]</code></pre>
+      </section>
+
+      <section>
+        <h2>Kubernetes Deployment</h2>
+        <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: refund-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: refund-api
+  template:
+    metadata:
+      labels:
+        app: refund-api
+    spec:
+      containers:
+      - name: refund-api
+        image: myregistry.azurecr.io/refund-api:latest
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"</code></pre>
+
+        <h3>Key Concepts</h3>
+        <ul>
+          <li><strong>Pod:</strong> Smallest deployable unit (one or more containers)</li>
+          <li><strong>Deployment:</strong> Declarative updates with rolling restarts</li>
+          <li><strong>Service:</strong> Exposes pods as network endpoint</li>
+          <li><strong>HPA:</strong> Horizontal Pod Autoscaler (scale by CPU/memory)</li>
+        </ul>
+      </section>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <p><a href="../index.html">← Back to Home</a></p>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn">▲</button>
+    <button id="scroll-down" class="scroll-btn">▼</button>
+  </div>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>

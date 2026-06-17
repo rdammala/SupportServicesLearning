@@ -1,9 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Engineer Perspective - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles" class="active">Roles</a></li>
+          <li><a href="../index.html#technologies">Technologies</a></li>
+          <li><a href="../labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <a href="../index.html#roles">Roles</a> <span>/</span> <span>Platform Engineer</span>
+      </div>
+
+      <section class="hero">
+        <h1>The Platform Engineer Perspective</h1>
+        <p>Building developer experience: tooling, observability, self-serve infrastructure, and paved roads</p>
+      </section>
+
+      <section>
+        <h2>🏭 What a Platform Engineer Owns</h2>
+        <table>
+          <thead><tr><th>Area</th><th>Ownership</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Developer tools</strong></td><td>SDKs, templates, CLI utilities</td></tr>
+            <tr><td><strong>Self-serve infrastructure</strong></td><td>IaC, deployment automation, guardrails</td></tr>
+            <tr><td><strong>Internal APIs</strong></td><td>Common auth, logging, telemetry patterns</td></tr>
+            <tr><td><strong>Observability platform</strong></td><td>Logs, metrics, dashboards, alerts</td></tr>
+            <tr><td><strong>Security posture</strong></td><td>Standards, compliance, secret rotation</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>📒 Platform Paved Roads</h2>
+        <p>A "paved road" is the recommended, tested way to do something. Make the right way the easy way:</p>
+        <ul>
+          <li><strong>Example:</strong> "To create a new microservice, run <code>paved-road-init service-name</code>"</li>
+          <li><strong>Result:</strong> Scaffold with correct DI, logging, auth, test structure</li>
+          <li><strong>Benefit:</strong> Consistency, reduced boilerplate, best practices baked in</li>
+        </ul>
+
+        <h3>Paved Road Elements</h3>
+        <ul>
+          <li>💾 Templates: Repository/code templates</li>
+          <li>🔰 Tooling: CLI or VS Code extensions</li>
+          <li>📚 Documentation: When and why to use the road</li>
+          <li>✅ Guardrails: Linting, validation, gates</li>
+          <li>🎆 Observability: Built-in dashboards, traces</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🔍 Developer Experience (DX)</h2>
+        <ul>
+          <li><strong>Onboarding time:</strong> Can a new engineer ship on day 2?</li>
+          <li><strong>Local dev setup:</strong> Is it one command? 30 seconds?</li>
+          <li><strong>Debugging:</strong> Can I set a breakpoint and see service mesh behavior?</li>
+          <li><strong>Deployment:</strong> Push to prod in 5 clicks or one CLI call?</li>
+          <li><strong>Monitoring:</strong> Can I navigate to my app's dashboard instantly?</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>💬 Interview Q&A</h2>
+
+        <h3>Q1: Why invest in tooling when engineers can just read docs?</h3>
+        <p><strong>A:</strong> <em>Because tooling scales. Docs get out of date. Templates enforce consistency without humans checking. For 100 services, a good template saves 1000s of hours of manual setup and errors.</em></p>
+
+        <h3>Q2: How do you get engineers to use your "paved road"?</h3>
+        <p><strong>A:</strong> <em>Make the paved road the easiest path. If it's faster than the alternative, engineers use it naturally. Also: iterate on feedback, fix pain points, celebrate wins publicly.</em></p>
+
+        <h3>Q3: You notice inconsistent logging across services. What do you do?</h3>
+        <p><strong>A:</strong> <em>Build a shared logging library that's hard to use wrong. Include it in templates. Run a workshop on structured logging. Audit a few services, show the wins, then evangelize.</em></p>
+      </section>
+
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="./tpm-perspective.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← TPM</a>
+        <a href="../index.html#roles" class="btn btn-secondary" style="flex: 1; text-align: center;">All Roles →</a>
+        <a href="../index.html" class="btn btn-secondary" style="flex: 1; text-align: center;">Home →</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>
