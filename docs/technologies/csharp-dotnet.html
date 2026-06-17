@@ -1,9 +1,296 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C# & .NET 10 - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles">Roles</a></li>
+          <li><a href="../index.html#technologies" class="active">Technologies</a></li>
+          <li><a href="../labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <button class="sidebar-close">✕</button>
+    <div class="sidebar-section">
+      <div class="sidebar-title">🎯 Roles</div>
+      <a href="../roles/sre-perspective.html" class="sidebar-link">Site Reliability Engineer</a>
+      <a href="../roles/devops-engineer.html" class="sidebar-link">DevOps Engineer</a>
+      <a href="../roles/data-engineer.html" class="sidebar-link">Data Engineer</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">⚙️ Technologies</div>
+      <a href="./observability.html" class="sidebar-link">Observability</a>
+      <a href="./csharp-dotnet.html" class="sidebar-link active">C# / .NET 10</a>
+      <a href="./api-integrations.html" class="sidebar-link">API Integrations</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <a href="../index.html#technologies">Technologies</a> <span>/</span> <span>C# & .NET 10</span>
+      </div>
+
+      <section class="hero">
+        <h1>C# & .NET 10: Modern Language + Platform</h1>
+        <p>Async/await, records, LINQ, null safety, and deep OOP patterns for production services</p>
+      </section>
+
+      <div class="toc">
+        <div class="toc-title">📋 On This Page</div>
+        <ul>
+          <li><a href="#async-fundamentals">Async Fundamentals</a></li>
+          <li><a href="#records-nullability">Records & Nullability</a></li>
+          <li><a href="#linq-patterns">LINQ Patterns</a></li>
+          <li><a href="#dependency-injection">Dependency Injection</a></li>
+          <li><a href="#interview">Interview Q&A</a></li>
+        </ul>
+      </div>
+
+      <section id="async-fundamentals">
+        <h2>🔄 Async/Await: The Foundation</h2>
+        <p>Modern .NET is <strong>async-first</strong>. Every I/O operation (database, HTTP, file) should be async to free threads for other requests.</p>
+
+        <h3>Core Pattern</h3>
+        <pre><code>// Async method returns Task<T>
+public async Task<RefundRequest> GetRefundAsync(string id)
+{
+    // await releases the thread until operation completes
+    var item = await _container.ReadItemAsync<RefundRequest>(id);
+    return item.Resource;
+}</code></pre>
+
+        <h3>❌ Common Mistakes</h3>
+        <ul>
+          <li><strong>.Result / .Wait():</strong> Blocks the thread, defeats the purpose</li>
+          <li><strong>Fire-and-forget (not awaiting):</strong> Exceptions get swallowed</li>
+          <li><strong>Async void:</strong> Only use for event handlers, never for methods you call</li>
+        </ul>
+
+        <h3>✅ Best Practice</h3>
+        <pre><code>// 1. Return Task or Task<T>, never void
+// 2. Always await
+// 3. Use ConfigureAwait(false) in libraries
+public async Task ProcessRefundAsync(string id)
+{
+    var refund = await GetRefundAsync(id).ConfigureAwait(false);
+    await _serviceBus.SendAsync(refund).ConfigureAwait(false);
+}</code></pre>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab: Async deadlock detection</div>
+          <div class="lab-box-content">
+            <strong>Code:</strong> Write 2 methods: one that deadlocks (.Result), one that works (async/await)<br>
+            <strong>Acceptance:</strong> Explain why .Result blocks, how async/await avoids it
+          </div>
+        </div>
+      </section>
+
+      <section id="records-nullability">
+        <h2>📋 Records & Nullable Reference Types</h2>
+        
+        <h3>Records (C# 9+): Immutable by default</h3>
+        <pre><code>// Contract models are records (immutable, value semantics)
+public record RefundRequest(
+    string Id,
+    string UserId,
+    decimal Amount,
+    DateTime CreatedAt
+);
+
+// Deconstruct for convenience
+var (id, userId, amount, _) = refund;</code></pre>
+
+        <h3>Nullable Reference Types (NRT)</h3>
+        <pre><code>// Enable in .csproj: <Nullable>enable</Nullable>
+
+// Non-nullable by default (null = error)
+public string Name { get; set; }  // must be set; null = compiler error
+
+// Nullable explicitly marked
+public string? Description { get; set; }  // can be null
+
+// Null-check with pattern matching
+if (refund.Description is not null)
+{
+    logger.LogInformation("Description: {desc}", refund.Description);
+}</code></pre>
+
+        <h3>Benefits</h3>
+        <ul>
+          <li>Compiler catches null dereferences at build time</li>
+          <li>Clearer contracts ("is this nullable?")</li>
+          <li>Fewer NullReferenceException surprises at runtime</li>
+        </ul>
+      </section>
+
+      <section id="linq-patterns">
+        <h2>🔍 LINQ: Language Integrated Queries</h2>
+        
+        <h3>Query vs Method Syntax</h3>
+        <pre><code>var results = _refunds
+    .Where(r => r.Amount > 100)
+    .OrderByDescending(r => r.CreatedAt)
+    .Select(r => new { r.Id, r.Amount })
+    .ToList();
+
+// Equivalent query syntax
+var results2 = (from r in _refunds
+                where r.Amount > 100
+                orderby r.CreatedAt descending
+                select new { r.Id, r.Amount })
+                .ToList();</code></pre>
+
+        <h3>Lazy Evaluation (IEnumerable)</h3>
+        <pre><code>// IEnumerable: lazy (not evaluated until enumerated)
+IEnumerable<Refund> query = _refunds
+    .Where(r => r.Status == "Approved");
+    // Nothing evaluated yet!
+
+// ToList(): forces evaluation immediately
+var results = query.ToList();  // NOW evaluated</code></pre>
+
+        <h3>Common Patterns</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pattern</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Grouping</strong></td>
+              <td><code>.GroupBy(r => r.UserId).Select(g => new { UserId = g.Key, Count = g.Count() })</code></td>
+            </tr>
+            <tr>
+              <td><strong>Join</strong></td>
+              <td><code>.Join(users, r => r.UserId, u => u.Id, (r, u) => new { Refund = r, User = u })</code></td>
+            </tr>
+            <tr>
+              <td><strong>Aggregate</strong></td>
+              <td><code>.Aggregate(0, (sum, r) => sum + r.Amount)</code></td>
+            </tr>
+            <tr>
+              <td><strong>Distinct</strong></td>
+              <td><code>.Select(r => r.UserId).Distinct().ToList()</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="dependency-injection">
+        <h2>🔧 Dependency Injection Patterns</h2>
+        
+        <h3>Constructor Injection (Standard)</h3>
+        <pre><code>public class RefundService
+{
+    private readonly ICosmosContainer _container;
+    private readonly IServiceBus _serviceBus;
+    
+    public RefundService(ICosmosContainer container, IServiceBus serviceBus)
+    {
+        _container = container;
+        _serviceBus = serviceBus;
+    }
+}</code></pre>
+
+        <h3>Service Registration (Composition Root)</h3>
+        <pre><code>// In Startup or Program.cs
+services.AddScoped<IRefundService, RefundService>();
+services.AddSingleton<ICacheLayer, MemoryCache>();
+services.AddTransient<IProcessor, OrderProcessor>();</code></pre>
+
+        <h3>Lifetimes</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Lifetime</th>
+              <th>Use when</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Transient</strong></td>
+              <td>Stateless, lightweight (created per injection)</td>
+            </tr>
+            <tr>
+              <td><strong>Scoped</strong></td>
+              <td>Per-request context (default for web requests)</td>
+            </tr>
+            <tr>
+              <td><strong>Singleton</strong></td>
+              <td>Shared across app lifetime (thread-safe, immutable)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab: Factory pattern with DI</div>
+          <div class="lab-box-content">
+            <strong>Task:</strong> Create a factory that uses DI to produce different RefundProcessors based on strategy parameter<br>
+            <strong>Acceptance:</strong> Factory registered in DI + 2 processor implementations
+          </div>
+        </div>
+      </section>
+
+      <section id="interview">
+        <h2>💬 Interview Q&A</h2>
+        
+        <h3>Q1: What's the difference between Task.Run and async/await?</h3>
+        <p><strong>A:</strong> <em>Task.Run schedules work on a threadpool thread (useful for CPU-bound work). Async/await, when awaiting I/O, releases the current thread immediately without blocking (useful for scalability). For I/O-bound operations, use async/await; for CPU work, use Task.Run.</em></p>
+
+        <h3>Q2: Why is nullability important in modern .NET?</h3>
+        <p><strong>A:</strong> <em>Nullable Reference Types (NRT) let the compiler catch null dereferences at build time instead of runtime. This shifts errors left, reduces NullReferenceExceptions in production, and makes API contracts clearer (is this param nullable or not?).</em></p>
+
+        <h3>Q3: LINQ Where vs Select: which is faster?</h3>
+        <p><strong>A:</strong> <em>Neither is "faster"—both are O(n). But Where filters early (fewer items to process downstream), so it's often more efficient in practice. The real win is query composition: lazy evaluation means we only do work we need.</em></p>
+
+        <h3>Q4: Why use records instead of classes?</h3>
+        <p><strong>A:</strong> <em>Records are immutable by default (fewer bugs), have value semantics (two records with same data are equal), and support deconstruction. Classes are mutable and have reference semantics. Use records for DTOs/contracts, classes for stateful services.</em></p>
+
+        <h3>Q5: What's the gotcha with Singleton + DI?</h3>
+        <p><strong>A:</strong> <em>Singletons live for the app's lifetime. If you inject a Scoped service into a Singleton, the Scoped service gets promoted to Singleton too (captive dependency). This can cause resource leaks. Always prefer Transient → Scoped → Singleton in DI graphs.</em></p>
+      </section>
+
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="./observability.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← Observability</a>
+        <a href="../index.html#technologies" class="btn btn-secondary" style="flex: 1; text-align: center;">All Technologies →</a>
+        <a href="./api-integrations.html" class="btn btn-secondary" style="flex: 1; text-align: center;">API Integrations →</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>

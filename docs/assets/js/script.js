@@ -195,3 +195,107 @@ if (typeof mermaid !== 'undefined') {
     fontFamily: 'segoe ui, sans-serif'
   });
 }
+
+// ===== THEME TOGGLE (Dark/Light) =====
+function initThemeToggle() {
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (!themeToggle) return;
+
+  // Get saved theme or default to dark
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  applyTheme(savedTheme);
+
+  themeToggle.addEventListener('click', function() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  });
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+}
+
+// ===== SEARCH FUNCTIONALITY =====
+function initSearch() {
+  const searchInput = document.querySelector('.search-input');
+  const searchResults = document.querySelector('.search-results');
+  
+  if (!searchInput || !searchResults) return;
+
+  // Build searchable index from page headings and links
+  const searchIndex = [
+    { title: 'Home', path: '/', type: 'page' },
+    { title: 'SRE Perspective', path: '/roles/sre-perspective.html', type: 'role' },
+    { title: 'DevOps Engineer', path: '/roles/devops-engineer.html', type: 'role' },
+    { title: 'Data Engineer', path: '/roles/data-engineer.html', type: 'role' },
+    { title: 'Technical Support', path: '/roles/technical-support.html', type: 'role' },
+    { title: 'TPM', path: '/roles/tpm-perspective.html', type: 'role' },
+    { title: 'Platform Engineer', path: '/roles/platform-engineer.html', type: 'role' },
+    { title: 'C# / .NET 10', path: '/technologies/csharp-dotnet.html', type: 'tech' },
+    { title: 'React / TypeScript', path: '/technologies/react-typescript.html', type: 'tech' },
+    { title: 'API Integrations', path: '/technologies/api-integrations.html', type: 'tech' },
+    { title: 'Agentic AI', path: '/technologies/agentic-ai.html', type: 'tech' },
+    { title: 'Bicep / ARM', path: '/technologies/bicep-arm.html', type: 'tech' },
+    { title: 'YAML / Pipelines', path: '/technologies/yaml-pipelines.html', type: 'tech' },
+    { title: 'Git / GitHub Actions', path: '/technologies/git-github-actions.html', type: 'tech' },
+    { title: 'Observability', path: '/technologies/observability.html', type: 'tech' },
+    { title: 'AKS / Containers', path: '/technologies/aks-containers.html', type: 'tech' },
+    { title: 'Labs & Capstones', path: '/labs/labs-index.html', type: 'labs' }
+  ];
+
+  searchInput.addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase().trim();
+    
+    if (!query) {
+      searchResults.innerHTML = '';
+      return;
+    }
+
+    const results = searchIndex.filter(item =>
+      item.title.toLowerCase().includes(query) ||
+      item.type.toLowerCase().includes(query)
+    );
+
+    if (results.length === 0) {
+      searchResults.innerHTML = '<div class="search-no-results">No results found. Try another search term.</div>';
+      return;
+    }
+
+    searchResults.innerHTML = results.map(result => `
+      <div class="search-result-item" onclick="window.location.href='${result.path}'">
+        <div class="search-result-title">${result.title}</div>
+        <div class="search-result-path">
+          <span style="background: rgba(0,212,255,0.2); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase;">${result.type}</span>
+        </div>
+        <div class="search-result-preview">Jump to this guide →</div>
+      </div>
+    `).join('');
+  });
+
+  // Allow Enter key to go to first result
+  searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      const firstResult = searchResults.querySelector('.search-result-item');
+      if (firstResult) {
+        firstResult.click();
+      }
+    }
+  });
+}
+
+// Initialize theme and search when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    initThemeToggle();
+    initSearch();
+  });
+} else {
+  initThemeToggle();
+  initSearch();
+}

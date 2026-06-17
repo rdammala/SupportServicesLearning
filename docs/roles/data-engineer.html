@@ -1,9 +1,326 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../coming-soon.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Engineer Perspective - SupportServices Learning Hub</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
-<body></body>
+<body>
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="logo">📚 Learning Hub</a>
+      <button class="nav-toggle">☰</button>
+      <nav>
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#roles" class="active">Roles</a></li>
+          <li><a href="../index.html#technologies">Technologies</a></li>
+          <li><a href="../labs/labs-index.html">Labs</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <button class="sidebar-close">✕</button>
+    <div class="sidebar-section">
+      <div class="sidebar-title">🎯 Roles</div>
+      <a href="./sre-perspective.html" class="sidebar-link">Site Reliability Engineer</a>
+      <a href="./devops-engineer.html" class="sidebar-link">DevOps Engineer</a>
+      <a href="./data-engineer.html" class="sidebar-link active">Data Engineer</a>
+      <a href="./technical-support.html" class="sidebar-link">Technical Support</a>
+      <a href="./tpm-perspective.html" class="sidebar-link">Technical Program Manager</a>
+      <a href="./platform-engineer.html" class="sidebar-link">Platform Engineer</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">⚙️ Technologies</div>
+      <a href="../technologies/observability.html" class="sidebar-link">Observability</a>
+      <a href="../technologies/api-integrations.html" class="sidebar-link">API Integrations</a>
+      <a href="../technologies/csharp-dotnet.html" class="sidebar-link">C# / .NET 10</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <a href="../index.html#roles">Roles</a> <span>/</span> <span>Data Engineer</span>
+      </div>
+
+      <section class="hero">
+        <h1>The Data Engineer Perspective</h1>
+        <p>Modeling operational data, building telemetry pipelines, and turning Cosmos + App Insights into insight</p>
+      </section>
+
+      <div class="toc">
+        <div class="toc-title">📋 On This Page</div>
+        <ul>
+          <li><a href="#data-ownership">What you own</a></li>
+          <li><a href="#cosmos-modeling">Cosmos DB modeling</a></li>
+          <li><a href="#change-feed">Change feed pipeline</a></li>
+          <li><a href="#telemetry">Telemetry to insights</a></li>
+          <li><a href="#interview">Interview Q&A</a></li>
+          <li><a href="#checklist">Readiness Checklist</a></li>
+        </ul>
+      </div>
+
+      <section id="data-ownership">
+        <h2>🧠 What a Data Engineer Owns</h2>
+        <p>This platform is <strong>operational-first</strong> (Cosmos NoSQL + telemetry), not a classic warehouse. The data engineer owns:</p>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Ownership</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Operational data modeling</strong></td>
+              <td>Cosmos containers, partition keys, contract vs storage models</td>
+            </tr>
+            <tr>
+              <td><strong>Telemetry pipeline</strong></td>
+              <td>App Insights → Log Analytics → KQL → dashboards</td>
+            </tr>
+            <tr>
+              <td><strong>Analytics</strong></td>
+              <td>KQL aggregations, funnels, cohorts, anomaly detection</td>
+            </tr>
+            <tr>
+              <td><strong>Data movement</strong></td>
+              <td>Export to ADX/Storage, retention, archival</td>
+            </tr>
+            <tr>
+              <td><strong>Quality & lineage</strong></td>
+              <td>Schema/versioning, idempotency, dedup</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="mermaid">
+flowchart LR
+    App["Apps: Frontend + Functions"] -->|writes| Cosmos["Cosmos DB"]
+    App -->|telemetry| AI["App Insights"]
+    AI --> LA["Log Analytics"]
+    LA -->|export| ADX["Azure Data Explorer"]
+    Cosmos -->|change feed| Func["Azure Functions<br/>processor"]
+    Func --> Blob["Blob: parquet/<br/>archival"]
+    ADX --> Dash["Workbooks / Power BI"]
+    Blob --> Dash
+        </div>
+      </section>
+
+      <section id="cosmos-modeling">
+        <h2>Cosmos DB Data Modeling</h2>
+        
+        <h3>Core Principles</h3>
+        <ul>
+          <li><strong>Model for access patterns</strong>, not normalization. Denormalize so a read = one query.</li>
+          <li><strong>Partition key</strong> is the most important decision: choose high-cardinality, evenly-distributed, query-aligned keys. Avoid hot partitions (&gt;50% RU on one key).</li>
+          <li><strong>Contract vs storage models:</strong> API request/response models are separate from how data is stored. Map deliberately.</li>
+          <li><strong>RU economics:</strong> Every read/write costs Request Units; batch and point-read where possible.</li>
+        </ul>
+
+        <h3>Partition Key Patterns</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pattern</th>
+              <th>Use when</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>/tenantId</code></td>
+              <td>Multi-tenant isolation, even tenant sizes</td>
+            </tr>
+            <tr>
+              <td><code>/userId</code></td>
+              <td>Per-user data, many users</td>
+            </tr>
+            <tr>
+              <td>Synthetic <code>/{type}_{date}</code></td>
+              <td>Time-series with bounded hot range</td>
+            </tr>
+            <tr>
+              <td>Composite (hash of id)</td>
+              <td>Avoiding monotonically increasing hotspots</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab 1: Pick a partition key</div>
+          <div class="lab-box-content">
+            <strong>Scenario:</strong> "Support conversation messages" container with queries by conversationId (recent-first)<br><br>
+            <strong>Task:</strong><br>
+            1. List the top 3 access patterns<br>
+            2. Choose a partition key and justify against hot-partition risk<br>
+            3. Write the point-read and the range query<br><br>
+            <strong>Acceptance:</strong> Partition key choice + 2 queries + one-line hot-partition justification
+          </div>
+        </div>
+
+        <h3>Example: Point read (cheapest)</h3>
+        <pre><code>// 1 RU: partition key + id
+var msg = await container.ReadItemAsync<Message>(
+    id: messageId, partitionKey: new PartitionKey(conversationId));</code></pre>
+
+        <h3>Example: Range query within partition</h3>
+        <pre><code>var query = new QueryDefinition(
+    "SELECT * FROM c WHERE c.conversationId = @cid ORDER BY c.timestamp DESC")
+    .WithParameter("@cid", conversationId);
+    
+var results = await container.GetItemQueryIterator<Message>(query)
+    .ReadNextAsync();</code></pre>
+      </section>
+
+      <section id="change-feed">
+        <h2>The Change Feed Pipeline</h2>
+        <p>Cosmos <strong>change feed</strong> gives an ordered, durable stream of inserts/updates — the backbone for materialized views, search indexing, and exports.</p>
+
+        <div class="mermaid">
+flowchart LR
+    Cosmos["Cosmos DB<br/>RefundRequests"]
+    Insert["INSERT refund_request"]
+    Update["UPDATE refund_request"]
+    Feed["Change Feed"]
+    Lease["Lease container<br/>tracks progress"]
+    Consumer["Function:<br/>RefundProcessor"]
+    Idempotent["Idempotent tracking<br/>by processed_id"]
+    SB["Service Bus<br/>RefundCreated event"]
+    AI["App Insights<br/>custom event"]
+    
+    Insert -->|pushed to| Feed
+    Update -->|pushed to| Feed
+    Feed --> Lease
+    Feed --> Consumer
+    Consumer -->|dedupe via| Idempotent
+    Consumer -->|publish| SB
+    Consumer -->|telemetry| AI
+        </div>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab 2: Idempotent change-feed processor</div>
+          <div class="lab-box-content">
+            <strong>Goal:</strong> Ensure each change is processed exactly once, even if failures/retries happen<br><br>
+            <strong>Acceptance:</strong> Processor with duplicate detection + idempotent upsert + checkpoint tracking
+          </div>
+        </div>
+      </section>
+
+      <section id="telemetry">
+        <h2>Telemetry to Insights</h2>
+        
+        <h3>The pipeline flow</h3>
+        <p><strong>App emits events</strong> → <strong>App Insights ingests</strong> → <strong>Log Analytics stores</strong> → <strong>KQL queries</strong> → <strong>Dashboards visualize</strong></p>
+
+        <h3>Custom event in code</h3>
+        <pre><code>var properties = new Dictionary<string, string>
+{
+    { "tenant_id", tenantId },
+    { "refund_status", status },
+    { "amount_usd", amount.ToString() }
+};
+telemetryClient.TrackEvent("RefundCreated", properties);</code></pre>
+
+        <h3>KQL: Funnel analysis</h3>
+        <pre><code>// Refund funnel: requests → approved → processed
+customEvents
+| where name == "RefundCreated" or name == "RefundApproved" or name == "RefundProcessed"
+| summarize count() by name
+| order by name asc</code></pre>
+
+        <div class="lab-box">
+          <div class="lab-box-title">🧪 Lab 3: Anomaly detection KQL</div>
+          <div class="lab-box-content">
+            <strong>Goal:</strong> Detect when refund approval rate drops below 80%<br><br>
+            <strong>Acceptance:</strong> KQL query that identifies the spike + write an alert rule
+          </div>
+        </div>
+      </section>
+
+      <section id="interview">
+        <h2>💬 Interview Q&A</h2>
+        
+        <h3>Q1: How do you choose a partition key?</h3>
+        <p><strong>A:</strong> <em>I list the top access patterns (how I'll query the data), then pick a key that's high-cardinality (many distinct values), evenly distributed (no single tenant gets 50% of RUs), and query-aligned (I filter by it in my most common queries). If partition key X = tenantId, I can't efficiently query by userId without a cross-partition query (slower).</em></p>
+
+        <h3>Q2: Your change-feed processor failed mid-batch. How do you prevent re-processing?</h3>
+        <p><strong>A:</strong> <em>Idempotent tracking: when the processor handles a change, it records the Cosmos change-token + item ID in a processed-ids container. On retry, it checks: if this item was already processed, skip it. This ensures exactly-once semantics even with failures.</em></p>
+
+        <h3>Q3: A KQL query is running slow on 1TB of data. How do you optimize?</h3>
+        <p><strong>A:</strong> <em>Move the filter earlier: instead of SELECT * then filter, push filters into WHERE clauses at the top. Use materialized views if the query is repeated. Export hot data to ADX (Kusto) for faster analysis on large datasets. Sample data (percentiles) to avoid scanning 100% of rows.</em></p>
+
+        <h3>Q4: Your telemetry volume is 1 billion events/day. How do you manage costs?</h3>
+        <p><strong>A:</strong> <em>Cardinality control: use dimensions (tenant, region, status) instead of creating new metric names per user. Sample high-volume traces (keep 1% of successful requests, 100% of errors). Aggregate at source before sending to App Insights.</em></p>
+
+        <h3>Q5: Explain contract vs. storage models.</h3>
+        <p><strong>A:</strong> <em>Contract model = what API returns to clients (e.g., { userId, name, email }). Storage model = how data is stored in Cosmos (e.g., { userId, profile: { name, email, preferences } }). We map between them deliberately. This lets us change storage without breaking API clients.</em></p>
+      </section>
+
+      <section id="checklist">
+        <h2>✅ Data Engineer Readiness Checklist</h2>
+        
+        <div class="card">
+          <h3>Knowledge</h3>
+          <ul>
+            <li>☐ I can choose a partition key and justify it</li>
+            <li>☐ I understand access patterns vs normalization</li>
+            <li>☐ I can explain change-feed idempotency</li>
+            <li>☐ I can write a KQL funnel query</li>
+            <li>☐ I understand RU economics (point read vs range query)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Operational</h3>
+          <ul>
+            <li>☐ I've designed a Cosmos schema for a real access pattern</li>
+            <li>☐ I've written an idempotent processor</li>
+            <li>☐ I've emitted custom telemetry and queried it in KQL</li>
+            <li>☐ I've optimized a slow KQL query</li>
+            <li>☐ I've set a cardinality control policy for a metric</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Next Steps</h3>
+          <ul>
+            <li>→ Deep-dive: <a href="../technologies/observability.html">Observability (App Insights/KQL)</a></li>
+            <li>→ Capstone: "Data + Observability" (end-to-end data + analytics)</li>
+            <li>→ <a href="./tpm-perspective.html">TPM Perspective</a> (understand metrics-driven decision making)</li>
+          </ul>
+        </div>
+      </section>
+
+      <div style="display: flex; gap: 1rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <a href="./devops-engineer.html" class="btn btn-secondary" style="flex: 1; text-align: center;">← DevOps Engineer</a>
+        <a href="../index.html#roles" class="btn btn-secondary" style="flex: 1; text-align: center;">All Roles →</a>
+        <a href="./technical-support.html" class="btn btn-secondary" style="flex: 1; text-align: center;">Technical Support →</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="scroll-controls">
+    <button id="scroll-up" class="scroll-btn" title="Scroll to top">▲</button>
+    <button id="scroll-down" class="scroll-btn" title="Scroll to bottom">▼</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/rdammala/SupportServicesLearning" target="_blank">📘 GitHub Repository</a>
+        <a href="../index.html">← Back to Home</a>
+      </div>
+      <p>&copy; 2026 SupportServices Learning Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/script.js"></script>
+</body>
 </html>
