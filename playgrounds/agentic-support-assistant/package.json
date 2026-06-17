@@ -1,0 +1,10 @@
+{
+  "name": "agentic-support-assistant-playground",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "chat": "node src/agent.js",
+    "demo": "node src/agent.js --demo"
+  }
+}

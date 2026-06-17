@@ -1,0 +1,17 @@
+{
+  "name": "ship-observe-recover-playground",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "simulate": "node src/simulateTraffic.js",
+    "incident:start": "node src/incidentControl.js start",
+    "incident:stop": "node src/incidentControl.js stop",
+    "recover": "node src/recover.js",
+    "demo": "node src/fullDemo.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: support-chat-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: support-chat-api
+  template:
+    metadata:
+      labels:
+        app: support-chat-api
+    spec:
+      containers:
+      - name: support-chat-api
+        image: mcr.microsoft.com/dotnet/samples:aspnetapp
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10

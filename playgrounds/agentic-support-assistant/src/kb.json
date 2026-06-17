@@ -1,0 +1,20 @@
+[
+  {
+    "id": "KB-1001",
+    "title": "Controller does not sync",
+    "keywords": ["controller", "sync", "pairing"],
+    "resolution": "Reset pairing, update firmware, and clear stale Bluetooth profile."
+  },
+  {
+    "id": "KB-1002",
+    "title": "Purchase not visible in library",
+    "keywords": ["purchase", "library", "entitlement"],
+    "resolution": "Refresh entitlement cache and validate region/account alignment."
+  },
+  {
+    "id": "KB-1003",
+    "title": "Chat service high latency",
+    "keywords": ["chat", "latency", "timeout"],
+    "resolution": "Check dependency timeouts, connection pool pressure, and retry storms."
+  }
+]

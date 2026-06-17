@@ -1,0 +1,16 @@
+[
+  {
+    "ticketId": "INC-9001",
+    "customerId": "C-123",
+    "summary": "Controller pairing fails after update",
+    "lastAction": "Requested firmware version and console logs",
+    "severity": "SEV-3"
+  },
+  {
+    "ticketId": "INC-9002",
+    "customerId": "C-777",
+    "summary": "Game purchase missing from library",
+    "lastAction": "Asked customer to relog and region-check account",
+    "severity": "SEV-2"
+  }
+]

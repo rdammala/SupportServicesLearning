@@ -1,0 +1,11 @@
+{
+  "name": "data-observability-playground",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node src/generateData.js",
+    "analyze": "node src/analyzeData.js",
+    "demo": "npm run generate && npm run analyze"
+  }
+}

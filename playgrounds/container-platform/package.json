@@ -1,0 +1,14 @@
+{
+  "name": "container-platform-playground",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node src/validateManifests.js",
+    "rollout": "node src/simulateRollout.js",
+    "demo": "npm run validate && npm run rollout"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
