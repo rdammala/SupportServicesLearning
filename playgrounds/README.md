@@ -5,6 +5,16 @@ This folder contains runnable local playgrounds for the four capstone labs.
 ## Prerequisites
 
 - Node.js 20+ (verified with Node.js 24)
+- A terminal (PowerShell is fine)
+- Basic comfort with `cd`, `npm install`, and `npm run`
+
+## For fresher developers
+
+1. Start with one playground only.
+2. Run `npm install` once in that folder.
+3. Run `npm run demo` to see the happy path.
+4. Read the output and map it to the capstone acceptance criteria.
+5. Then run individual scripts to learn each step deeply.
 
 ## Playgrounds
 
@@ -30,3 +40,9 @@ npm run demo
 ```
 
 Or run each script individually as documented in that playground's README.
+
+## Troubleshooting
+
+- If a command says a module is missing, run `npm install` in that same folder.
+- If you edited files and behavior looks odd, re-run `npm run demo` first to reset your baseline.
+- For demo failure analysis and fixes, see [PLAYGROUND_FAILURE_CASE_STUDY.md](PLAYGROUND_FAILURE_CASE_STUDY.md).

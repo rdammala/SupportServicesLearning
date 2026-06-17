@@ -4,6 +4,8 @@
 
 **Last updated:** June 2026 · **Stack:** .NET 10 · React 19 · Azure · Bicep · Azure DevOps + GitHub Actions · App Insights / OpenTelemetry / KQL · AKS
 
+**Live site:** https://rdammala.github.io/SupportServicesLearning/
+
 ---
 
 ## How to use this hub
@@ -78,6 +80,8 @@ Hands-on, self-graded exercises and end-to-end scenario drills.
 | Lab set | Guide |
 |---|---|
 | Lab index, setup, and capstone scenarios | [labs/README.md](labs/README.md) |
+| Runnable capstone playgrounds | [playgrounds/README.md](playgrounds/README.md) |
+| Demo failure case study and remediation patterns | [playgrounds/PLAYGROUND_FAILURE_CASE_STUDY.md](playgrounds/PLAYGROUND_FAILURE_CASE_STUDY.md) |
 
 ---
 
