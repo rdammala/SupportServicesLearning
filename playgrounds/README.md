@@ -2,6 +2,14 @@
 
 This folder contains runnable local playgrounds for the four capstone labs.
 
+## Run in the browser
+
+If you want a browser-based environment, open this repo in Gitpod:
+
+https://gitpod.io/#https://github.com/rdammala/SupportServicesLearning
+
+Gitpod usage is metered by monthly credits, so you can use it in small chunks like 1 hour per day as long as you stay within the monthly allowance. The allowance resets each billing month; it does not have to be consumed consecutively.
+
 ## Prerequisites
 
 - Node.js 20+ (verified with Node.js 24)
