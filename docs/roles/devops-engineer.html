@@ -20,8 +20,14 @@
           <li><a href="../labs/labs-index.html">Labs</a></li>
         </ul>
       </nav>
+      <button class="theme-toggle" title="Toggle theme">🌙</button>
     </div>
   </header>
+
+  <div class="search-container" style="position: absolute; top: 80px; left: 0; right: 0; background: var(--bg-darker); border-bottom: 1px solid var(--border); padding: 1rem; display: none;" id="search-overlay">
+    <input type="text" class="search-input" placeholder="Search guides (press /)..." style="max-width: 600px;" />
+    <div class="search-results"></div>
+  </div>
 
   <aside class="sidebar">
     <button class="sidebar-close">✕</button>
